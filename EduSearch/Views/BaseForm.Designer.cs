@@ -31,7 +31,7 @@
             this.navPanel = new System.Windows.Forms.Panel();
             this.lblMinim = new System.Windows.Forms.Label();
             this.lblExit = new System.Windows.Forms.Label();
-            this.bodyPanel = new System.Windows.Forms.Panel();
+            this.bodyPanel = new EduSearch.Custom.CustomPanel();
             this.lblTitle = new EduSearch.Custom.CustomLabel();
             this.navPanel.SuspendLayout();
             this.bodyPanel.SuspendLayout();
@@ -97,7 +97,7 @@
             this.bodyPanel.Location = new System.Drawing.Point(0, 30);
             this.bodyPanel.Name = "bodyPanel";
             this.bodyPanel.Size = new System.Drawing.Size(876, 510);
-            this.bodyPanel.TabIndex = 2;
+            this.bodyPanel.TabIndex = 3;
             // 
             // lblTitle
             // 
@@ -137,7 +137,7 @@
         private System.Windows.Forms.Panel navPanel;
         private System.Windows.Forms.Label lblMinim;
         private System.Windows.Forms.Label lblExit;
-        private System.Windows.Forms.Panel bodyPanel;
+        private Custom.CustomPanel bodyPanel;
         private Custom.CustomLabel lblTitle;
     }
 }
