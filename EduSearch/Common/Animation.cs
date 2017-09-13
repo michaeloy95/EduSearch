@@ -5,11 +5,16 @@ namespace EduSearch.Common
     public class Animation
     {
         /// <summary>
+        /// Maximum value in color range
+        /// </summary>
+        private const int MAX_COLOR = 255;
+
+        /// <summary>
         /// Gives raise up animation to the label
         /// </summary>
-        /// <param name="label">label object</param>
-        /// <param name="interval">time interval in millisecond</param>
-        /// <param name="height">height the animation takes place</param>
+        /// <param name="label">Label object</param>
+        /// <param name="interval">Yime interval in millisecond</param>
+        /// <param name="height">Height the animation takes place</param>
         public static void RaiseUpAnimation<T>(ref T control, int interval, int height)
         {
             System.Windows.Forms.Control myControl = control as System.Windows.Forms.Control;
@@ -37,8 +42,8 @@ namespace EduSearch.Common
         /// <summary>
         /// Gives fade in animation to label
         /// </summary>
-        /// <param name="label">label object</param>
-        /// <param name="interval">time interval in millisecond</param>
+        /// <param name="label">Label object</param>
+        /// <param name="interval">Time interval in millisecond</param>
         public static void LabelFadeInAnimation(ref Custom.CustomLabel label, int interval)
         {
             System.Windows.Forms.Label myLabel = label;
@@ -50,10 +55,10 @@ namespace EduSearch.Common
             timer.Interval = interval;
             timer.Tick += (s, e) =>
             {
-                alpha = (alpha > 255) ? 255 : alpha;
+                alpha = (alpha > MAX_COLOR) ? MAX_COLOR : alpha;
                 myLabel.ForeColor = Color.FromArgb(alpha, oriColor);
 
-                if (alpha == 255)
+                if (alpha == MAX_COLOR)
                 {
                     timer.Stop();
                 }
@@ -66,14 +71,14 @@ namespace EduSearch.Common
         /// <summary>
         /// Gives fade out animation to label
         /// </summary>
-        /// <param name="label">label object</param>
-        /// <param name="interval">time interval in millisecond</param>
+        /// <param name="label">Label object</param>
+        /// <param name="interval">Time interval in millisecond</param>
         public static void LabelFadeOutAnimation(ref Custom.CustomLabel label, int interval)
         {
             System.Windows.Forms.Label myLabel = label;
             Color oriColor = myLabel.ForeColor;
             const int REDUCE_ALPHA = 3;
-            int alpha = 255;
+            int alpha = MAX_COLOR;
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = interval;
@@ -97,9 +102,9 @@ namespace EduSearch.Common
         /// <summary>
         /// Gives fade in and out animation to label
         /// </summary>
-        /// <param name="label">label object</param>
-        /// <param name="interval">time interval in millisecond</param>
-        /// <param name="delay">time delay between fade in and out in millisecond</param>
+        /// <param name="label">Label object</param>
+        /// <param name="interval">Time interval in millisecond</param>
+        /// <param name="delay">Time delay between fade in and out in millisecond</param>
         public static void LabelFadeInOutAnimation(ref Custom.CustomLabel label, int interval, int delay)
         {
             System.Windows.Forms.Label myLabel = label;
@@ -112,12 +117,12 @@ namespace EduSearch.Common
             timer.Interval = interval;
             timer.Tick += (s, e) =>
             {
-                alpha = (alpha > 255) ? 255 : (alpha < 0) ? 0 : alpha;
+                alpha = (alpha > MAX_COLOR) ? MAX_COLOR : (alpha < 0) ? 0 : alpha;
                 if (fadeIn)
                 {
                     myLabel.ForeColor = Color.FromArgb(alpha, oriColor);
 
-                    if (alpha == 255)
+                    if (alpha == MAX_COLOR)
                     {
                         fadeIn = false;
                     }
@@ -148,6 +153,91 @@ namespace EduSearch.Common
 
             timer.Start();
             myLabel.Visible = true;
+        }
+
+        /// <summary>
+        /// Gives fade in animation to panel after certain delay
+        /// </summary>
+        /// <param name="panel">Object panel</param>
+        /// <param name="interval">Time interval in millisecond</param>
+        /// <param name="delay">Time delay in millisecond</param>
+        public static void PanelFadeInAfterAnimation(ref Custom.CustomPanel panel, int interval, int delay)
+        {
+            System.Windows.Forms.Panel myPanel = panel;
+            Color color = myPanel.BackColor;
+            const int ADD_ALPHA = 3;
+            int alpha = 0, total_interval = 0;
+
+            myPanel.Visible = true;
+            myPanel.BackColor = Color.FromArgb(alpha, color);
+
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Interval = interval;
+            timer.Tick += (s, e) =>
+            {
+                if (total_interval >= delay)
+                {
+                    total_interval = delay;
+                    myPanel.BackColor = Color.FromArgb(alpha, color);
+
+                    if (alpha >= MAX_COLOR)
+                    {
+                        timer.Stop();
+                        
+                        foreach (System.Windows.Forms.Control p in myPanel.Controls)
+                        {
+                            p.Visible = true;
+                        }
+
+                        return;
+                    }
+
+                    alpha += ADD_ALPHA;
+                }
+                else
+                {
+                    total_interval += interval;
+                }
+            };
+
+            timer.Start();
+        }
+
+        /// <summary>
+        /// Show panel after delay
+        /// </summary>
+        /// <param name="panel">Panel object</param>
+        /// <param name="interval">Time interval in millisecond</param>
+        /// <param name="delay">Time delay in millisecond</param>
+        public static void PanelShowAfterAnimation(ref Custom.CustomPanel panel, int interval, int delay)
+        {
+            System.Windows.Forms.Panel myPanel = panel;
+            int total_interval = 0;
+
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Interval = interval;
+            timer.Tick += (s, e) =>
+            {
+                if (total_interval >= delay)
+                {
+                    total_interval = delay;
+                    timer.Stop();
+                    
+                    myPanel.Visible = true;
+                    foreach (System.Windows.Forms.Control p in myPanel.Controls)
+                    {
+                        p.Visible = true;
+                    }
+
+                    return;
+                }
+                else
+                {
+                    total_interval += interval;
+                }
+            };
+
+            timer.Start();
         }
     }
 }
