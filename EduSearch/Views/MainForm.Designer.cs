@@ -33,30 +33,39 @@
             this.lblExit = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.bodyPanel = new EduSearch.Custom.CustomPanel();
+            this.leftPanel = new EduSearch.Custom.CustomPanel();
+            this.lblLog = new System.Windows.Forms.Label();
+            this.lbLog = new System.Windows.Forms.ListBox();
             this.indexPanel = new EduSearch.Custom.CustomPanel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblIndex = new EduSearch.Custom.CustomLabel();
             this.btnIndex = new System.Windows.Forms.Button();
-            this.statusPanel = new EduSearch.Custom.CustomPanel();
-            this.lblIndexStatus = new EduSearch.Custom.CustomLabel();
             this.tbIndexLocation = new System.Windows.Forms.TextBox();
             this.tbCollection = new System.Windows.Forms.TextBox();
             this.lblTitle = new EduSearch.Custom.CustomLabel();
+            this.searchPanel = new EduSearch.Custom.CustomPanel();
+            this.tbSearch = new System.Windows.Forms.TextBox();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.navPanel.SuspendLayout();
             this.bodyPanel.SuspendLayout();
+            this.leftPanel.SuspendLayout();
             this.indexPanel.SuspendLayout();
-            this.statusPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.searchPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // navPanel
             // 
             this.navPanel.AutoSize = true;
             this.navPanel.BackColor = System.Drawing.Color.Transparent;
+            this.navPanel.Controls.Add(this.lblTitle);
             this.navPanel.Controls.Add(this.lblMinim);
             this.navPanel.Controls.Add(this.lblExit);
             this.navPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.navPanel.Location = new System.Drawing.Point(0, 0);
             this.navPanel.MinimumSize = new System.Drawing.Size(200, 30);
             this.navPanel.Name = "navPanel";
-            this.navPanel.Size = new System.Drawing.Size(876, 30);
+            this.navPanel.Size = new System.Drawing.Size(876, 31);
             this.navPanel.TabIndex = 0;
             this.navPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.NavPanel_MouseDown);
             // 
@@ -69,7 +78,7 @@
             this.lblMinim.Location = new System.Drawing.Point(773, 0);
             this.lblMinim.Name = "lblMinim";
             this.lblMinim.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
-            this.lblMinim.Size = new System.Drawing.Size(51, 30);
+            this.lblMinim.Size = new System.Drawing.Size(51, 31);
             this.lblMinim.TabIndex = 2;
             this.lblMinim.Text = "_";
             this.lblMinim.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -88,7 +97,7 @@
             this.lblExit.Location = new System.Drawing.Point(824, 0);
             this.lblExit.Name = "lblExit";
             this.lblExit.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
-            this.lblExit.Size = new System.Drawing.Size(52, 30);
+            this.lblExit.Size = new System.Drawing.Size(52, 31);
             this.lblExit.TabIndex = 1;
             this.lblExit.Text = "X";
             this.lblExit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -106,68 +115,101 @@
             // bodyPanel
             // 
             this.bodyPanel.BackColor = System.Drawing.Color.Transparent;
-            this.bodyPanel.Controls.Add(this.indexPanel);
-            this.bodyPanel.Controls.Add(this.lblTitle);
+            this.bodyPanel.Controls.Add(this.searchPanel);
+            this.bodyPanel.Controls.Add(this.leftPanel);
             this.bodyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bodyPanel.Location = new System.Drawing.Point(0, 30);
+            this.bodyPanel.Location = new System.Drawing.Point(0, 31);
             this.bodyPanel.Name = "bodyPanel";
-            this.bodyPanel.Size = new System.Drawing.Size(876, 510);
+            this.bodyPanel.Size = new System.Drawing.Size(876, 509);
             this.bodyPanel.TabIndex = 3;
+            // 
+            // leftPanel
+            // 
+            this.leftPanel.Controls.Add(this.lblLog);
+            this.leftPanel.Controls.Add(this.lbLog);
+            this.leftPanel.Controls.Add(this.indexPanel);
+            this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.leftPanel.Location = new System.Drawing.Point(0, 0);
+            this.leftPanel.Name = "leftPanel";
+            this.leftPanel.Size = new System.Drawing.Size(202, 509);
+            this.leftPanel.TabIndex = 4;
+            // 
+            // lblLog
+            // 
+            this.lblLog.Font = new System.Drawing.Font("Yu Gothic UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLog.Location = new System.Drawing.Point(4, 231);
+            this.lblLog.Name = "lblLog";
+            this.lblLog.Size = new System.Drawing.Size(195, 23);
+            this.lblLog.TabIndex = 5;
+            this.lblLog.Text = "Log";
+            this.lblLog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lbLog
+            // 
+            this.lbLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lbLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbLog.FormattingEnabled = true;
+            this.lbLog.Location = new System.Drawing.Point(3, 257);
+            this.lbLog.Name = "lbLog";
+            this.lbLog.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.lbLog.Size = new System.Drawing.Size(195, 247);
+            this.lbLog.TabIndex = 4;
+            this.lbLog.TabStop = false;
             // 
             // indexPanel
             // 
+            this.indexPanel.Controls.Add(this.pictureBox1);
+            this.indexPanel.Controls.Add(this.lblIndex);
             this.indexPanel.Controls.Add(this.btnIndex);
-            this.indexPanel.Controls.Add(this.statusPanel);
             this.indexPanel.Controls.Add(this.tbIndexLocation);
             this.indexPanel.Controls.Add(this.tbCollection);
             this.indexPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.indexPanel.Location = new System.Drawing.Point(0, 0);
             this.indexPanel.Name = "indexPanel";
-            this.indexPanel.Size = new System.Drawing.Size(876, 106);
+            this.indexPanel.Size = new System.Drawing.Size(202, 228);
             this.indexPanel.TabIndex = 3;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(57, 158);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(80, 60);
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblIndex
+            // 
+            this.lblIndex.Font = new System.Drawing.Font("Yu Gothic UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIndex.Location = new System.Drawing.Point(27, 6);
+            this.lblIndex.Margin = new System.Windows.Forms.Padding(0);
+            this.lblIndex.Name = "lblIndex";
+            this.lblIndex.Size = new System.Drawing.Size(139, 31);
+            this.lblIndex.TabIndex = 0;
+            this.lblIndex.Text = "Index";
+            this.lblIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnIndex
             // 
             this.btnIndex.Enabled = false;
             this.btnIndex.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIndex.Location = new System.Drawing.Point(302, 66);
+            this.btnIndex.Location = new System.Drawing.Point(12, 111);
             this.btnIndex.Name = "btnIndex";
-            this.btnIndex.Size = new System.Drawing.Size(275, 35);
+            this.btnIndex.Size = new System.Drawing.Size(174, 35);
             this.btnIndex.TabIndex = 3;
             this.btnIndex.Text = "Create Index";
             this.btnIndex.UseVisualStyleBackColor = true;
             this.btnIndex.Click += new System.EventHandler(this.btnIndex_Click);
             // 
-            // statusPanel
-            // 
-            this.statusPanel.Controls.Add(this.lblIndexStatus);
-            this.statusPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.statusPanel.Location = new System.Drawing.Point(0, 0);
-            this.statusPanel.Name = "statusPanel";
-            this.statusPanel.Size = new System.Drawing.Size(876, 25);
-            this.statusPanel.TabIndex = 2;
-            // 
-            // lblIndexStatus
-            // 
-            this.lblIndexStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblIndexStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIndexStatus.Location = new System.Drawing.Point(0, 0);
-            this.lblIndexStatus.Margin = new System.Windows.Forms.Padding(5);
-            this.lblIndexStatus.Name = "lblIndexStatus";
-            this.lblIndexStatus.Size = new System.Drawing.Size(876, 25);
-            this.lblIndexStatus.TabIndex = 0;
-            this.lblIndexStatus.Text = "Determine collection and index location...";
-            this.lblIndexStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // tbIndexLocation
             // 
             this.tbIndexLocation.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbIndexLocation.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.tbIndexLocation.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbIndexLocation.Location = new System.Drawing.Point(459, 34);
+            this.tbIndexLocation.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbIndexLocation.ForeColor = System.Drawing.Color.Black;
+            this.tbIndexLocation.Location = new System.Drawing.Point(12, 72);
             this.tbIndexLocation.Name = "tbIndexLocation";
             this.tbIndexLocation.ReadOnly = true;
-            this.tbIndexLocation.Size = new System.Drawing.Size(396, 24);
+            this.tbIndexLocation.Size = new System.Drawing.Size(174, 19);
             this.tbIndexLocation.TabIndex = 1;
             this.tbIndexLocation.Text = "<index location>";
             this.tbIndexLocation.Click += new System.EventHandler(this.tbIndexLocation_Click);
@@ -176,26 +218,55 @@
             // 
             this.tbCollection.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbCollection.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.tbCollection.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbCollection.Location = new System.Drawing.Point(24, 34);
+            this.tbCollection.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbCollection.ForeColor = System.Drawing.Color.Black;
+            this.tbCollection.Location = new System.Drawing.Point(12, 42);
             this.tbCollection.Name = "tbCollection";
             this.tbCollection.ReadOnly = true;
-            this.tbCollection.Size = new System.Drawing.Size(396, 24);
+            this.tbCollection.Size = new System.Drawing.Size(174, 19);
             this.tbCollection.TabIndex = 0;
             this.tbCollection.Text = "<collection>";
             this.tbCollection.Click += new System.EventHandler(this.tbCollection_Click);
             // 
             // lblTitle
             // 
-            this.lblTitle.Font = new System.Drawing.Font("Forte", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Font = new System.Drawing.Font("Forte", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.Black;
-            this.lblTitle.Location = new System.Drawing.Point(287, 180);
+            this.lblTitle.Location = new System.Drawing.Point(0, 4);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(303, 103);
-            this.lblTitle.TabIndex = 2;
+            this.lblTitle.Size = new System.Drawing.Size(113, 27);
+            this.lblTitle.TabIndex = 4;
             this.lblTitle.Text = "EduSearch";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblTitle.Visible = false;
+            // 
+            // searchPanel
+            // 
+            this.searchPanel.Controls.Add(this.btnSearch);
+            this.searchPanel.Controls.Add(this.tbSearch);
+            this.searchPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.searchPanel.Location = new System.Drawing.Point(202, 0);
+            this.searchPanel.Name = "searchPanel";
+            this.searchPanel.Size = new System.Drawing.Size(674, 509);
+            this.searchPanel.TabIndex = 5;
+            // 
+            // tbSearch
+            // 
+            this.tbSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbSearch.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSearch.Location = new System.Drawing.Point(91, 49);
+            this.tbSearch.Name = "tbSearch";
+            this.tbSearch.Size = new System.Drawing.Size(408, 33);
+            this.tbSearch.TabIndex = 0;
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Font = new System.Drawing.Font("Yu Gothic UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearch.Location = new System.Drawing.Point(496, 47);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(69, 37);
+            this.btnSearch.TabIndex = 6;
+            this.btnSearch.Text = "Search";
+            this.btnSearch.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -213,9 +284,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.navPanel.ResumeLayout(false);
             this.bodyPanel.ResumeLayout(false);
+            this.leftPanel.ResumeLayout(false);
             this.indexPanel.ResumeLayout(false);
             this.indexPanel.PerformLayout();
-            this.statusPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.searchPanel.ResumeLayout(false);
+            this.searchPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -227,14 +301,20 @@
         private System.Windows.Forms.Label lblMinim;
         private System.Windows.Forms.Label lblExit;
         private Custom.CustomPanel bodyPanel;
-        private Custom.CustomLabel lblTitle;
         private Custom.CustomPanel indexPanel;
-        private Custom.CustomPanel statusPanel;
         private System.Windows.Forms.TextBox tbIndexLocation;
         private System.Windows.Forms.TextBox tbCollection;
         private System.Windows.Forms.Button btnIndex;
-        private Custom.CustomLabel lblIndexStatus;
+        private Custom.CustomLabel lblIndex;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private Custom.CustomLabel lblTitle;
+        private Custom.CustomPanel leftPanel;
+        private System.Windows.Forms.Label lblLog;
+        private System.Windows.Forms.ListBox lbLog;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private Custom.CustomPanel searchPanel;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.TextBox tbSearch;
     }
 }
 

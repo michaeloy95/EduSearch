@@ -152,7 +152,6 @@ namespace EduSearch.Common
             };
 
             timer.Start();
-            myLabel.Visible = true;
         }
 
         /// <summary>
@@ -204,14 +203,14 @@ namespace EduSearch.Common
         }
 
         /// <summary>
-        /// Show panel after delay
+        /// Show control after delay
         /// </summary>
-        /// <param name="panel">Panel object</param>
+        /// <param name="control">Control object</param>
         /// <param name="interval">Time interval in millisecond</param>
         /// <param name="delay">Time delay in millisecond</param>
-        public static void PanelShowAfterAnimation(ref Custom.CustomPanel panel, int interval, int delay)
+        public static void ShowControlAfterAnimation(ref System.Windows.Forms.Control control, int interval, int delay)
         {
-            System.Windows.Forms.Panel myPanel = panel;
+            System.Windows.Forms.Control myControl = control;
             int total_interval = 0;
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -222,12 +221,8 @@ namespace EduSearch.Common
                 {
                     total_interval = delay;
                     timer.Stop();
-                    
-                    myPanel.Visible = true;
-                    foreach (System.Windows.Forms.Control p in myPanel.Controls)
-                    {
-                        p.Visible = true;
-                    }
+
+                    myControl.Visible = true;
 
                     return;
                 }

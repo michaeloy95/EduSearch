@@ -51,26 +51,58 @@ namespace EduSearch.Views
         /// </summary>
         private void ApplyTheme()
         {
+            //main form
             this.BackColor = Themes.FlatBlue.BACKGROUND_PRIMARY_COLOR;
-            this.navPanel.BackColor = Themes.FlatBlue.BACKGROUND_SECONDARY_COLOR;
-            this.statusPanel.BackColor = Themes.FlatBlue.BACKGROUND_SECONDARY_COLOR;
-            this.indexPanel.BackColor = Themes.FlatBlue.BACKGROUND_SECONDARY_COLOR;
+
+            //navigation panel
+            this.navPanel.BackColor = Themes.FlatBlue.BACKGROUND_NAVIGATION_COLOR;
             this.lblExit.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
             this.lblMinim.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
             this.lblTitle.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
-            this.lblIndexStatus.ForeColor = Themes.FlatBlue.TEXT_SECONDARY_COLOR;
+
+            //left panel
+            this.leftPanel.BackColor = Themes.FlatBlue.BACKGROUND_SECONDARY_COLOR;
+            this.lblLog.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
+
+            //index panel
+            this.indexPanel.BackColor = Themes.FlatBlue.BACKGROUND_SECONDARY_COLOR;
+            this.lblIndex.ForeColor = Themes.FlatBlue.TEXT_SECONDARY_COLOR;
+            this.tbCollection.ForeColor = Themes.FlatBlue.TEXT_TEXTBOX_COLOR;
+            this.tbIndexLocation.ForeColor = Themes.FlatBlue.TEXT_TEXTBOX_COLOR;
         }
 
         private void StartUpApp()
         {
-            indexPanel.Visible = false;
-            foreach (Control c in indexPanel.Controls)
+            // Hide all controls
+            foreach (Control c in this.Controls)
             {
                 c.Visible = false;
             }
-            Common.Animation.RaiseUpAnimation(ref lblTitle, 15, 30);
-            Common.Animation.LabelFadeInOutAnimation(ref lblTitle, 15, 2000);
-            Common.Animation.PanelShowAfterAnimation(ref indexPanel, 15, 5000);
+
+            //Create Title label
+            Custom.CustomLabel lblSplashTitle = new Custom.CustomLabel();
+            lblSplashTitle.Font = new Font("Forte", 48F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            lblSplashTitle.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
+            lblSplashTitle.Location = new Point(287, 220);
+            lblSplashTitle.Size = new Size(303, 103);
+            lblSplashTitle.Text = "EduSearch";
+            lblSplashTitle.TextAlign = ContentAlignment.MiddleCenter;
+            lblSplashTitle.Visible = true;
+            this.Controls.Add(lblSplashTitle);
+
+            //Show splash
+            Common.Animation.RaiseUpAnimation(ref lblSplashTitle, 15, 30);
+            Common.Animation.LabelFadeInOutAnimation(ref lblSplashTitle, 15, 2000);
+
+            //Show all controls
+            foreach (Control c in this.Controls)
+            {
+                Control c_pointer = c;
+                Common.Animation.ShowControlAfterAnimation(ref c_pointer, 15, 5000);
+            }
+
+            //Hide all controls in Search
+            this.searchPanel.Visible = false;
 
             folderBrowserDialog.SelectedPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
@@ -201,7 +233,7 @@ namespace EduSearch.Views
                 this.tbCollection.Text = folderBrowserDialog.SelectedPath;
                 CollectionLocation = folderBrowserDialog.SelectedPath;
 
-                if (!String.IsNullOrEmpty(CollectionLocation) || !String.IsNullOrEmpty(IndexLocation))
+                if (!String.IsNullOrEmpty(CollectionLocation) && !String.IsNullOrEmpty(IndexLocation))
                 {
                     btnIndex.Enabled = true;
                 }
@@ -220,7 +252,7 @@ namespace EduSearch.Views
                 this.tbIndexLocation.Text = folderBrowserDialog.SelectedPath;
                 IndexLocation = folderBrowserDialog.SelectedPath;
 
-                if (!String.IsNullOrEmpty(CollectionLocation) || !String.IsNullOrEmpty(IndexLocation))
+                if (!String.IsNullOrEmpty(CollectionLocation) && !String.IsNullOrEmpty(IndexLocation))
                 {
                     btnIndex.Enabled = true;
                 }
@@ -234,7 +266,16 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void btnIndex_Click(object sender, EventArgs e)
         {
+            searchPanel.Visible = true;
+        }
 
+        /// <summary>
+        /// Insert message to log
+        /// </summary>
+        /// <param name="message">message</param>
+        private void AddLog(string message)
+        {
+            this.lbLog.Items.Add(message);
         }
     }
 }

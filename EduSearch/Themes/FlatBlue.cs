@@ -20,6 +20,11 @@ namespace EduSearch.Themes
         public static Color TEXT_TERTIARY_COLOR = Color.FromArgb(189, 195, 199);
 
         /// <summary>
+        /// Textbox color on text
+        /// </summary>
+        public static Color TEXT_TEXTBOX_COLOR = Color.FromArgb(127, 140, 141);
+
+        /// <summary>
         /// Text's background color on mouse hover
         /// </summary>
         public static Color TEXT_BACKHOVER_COLOR = Color.FromArgb(94, 154, 193);
@@ -42,11 +47,16 @@ namespace EduSearch.Themes
         /// <summary>
         /// Primary color on background
         /// </summary>
-        public static Color BACKGROUND_PRIMARY_COLOR = Color.FromArgb(52, 152, 219);
+        public static Color BACKGROUND_PRIMARY_COLOR = Color.FromArgb(34, 167, 240);
 
         /// <summary>
         /// Secondary color on background
         /// </summary>x
-        public static Color BACKGROUND_SECONDARY_COLOR = Color.FromArgb(41, 128, 185);
+        public static Color BACKGROUND_SECONDARY_COLOR = Color.FromArgb(52, 152, 219);
+
+        /// <summary>
+        /// Secondary color on background
+        /// </summary>x
+        public static Color BACKGROUND_NAVIGATION_COLOR = Color.FromArgb(41, 128, 185);
     }
 }
