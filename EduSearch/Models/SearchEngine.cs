@@ -51,19 +51,38 @@ namespace EduSearch.Models
         private const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
 
         /// <summary>
+        /// Document ID field name
+        /// </summary>
+        private const string ID_FN = "Id";
+
+        /// <summary>
         /// Title field name
         /// </summary>
         private const string TITLE_FN = "Title";
+
+        /// <summary>
+        /// Author field name
+        /// </summary>
+        private const string AUTHOR_FN = "Author";
+
+        /// <summary>
+        /// Bibliography field name
+        /// </summary>
+        private const string BIBLIOGRAPHY_FN = "Bibliography";
 
         /// <summary>
         /// Abstract field name
         /// </summary>
         private const string ABSTRACT_FN = "Abstract";
 
-        /// <summary>
-        /// Text field name
-        /// </summary>
-        private const string TEXT_FN = "Text";
+        public enum IndexFieldName
+        {
+            Id,
+            Title,
+            Author,
+            Bibliography,
+            Abstract
+        };
 
         /// <summary>
         /// Search Engine default constructor
@@ -91,10 +110,16 @@ namespace EduSearch.Models
         /// Indexes the given text
         /// </summary>
         /// <param name="text">Text to index</param>
-        public void IndexText(string text)
+        /// <param name="indexFieldName">Index field name</param>
+        public void IndexText(string text, IndexFieldName indexFieldName)
         {
-            Lucene.Net.Documents.Field field = new Field(TEXT_FN, text, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
-            Lucene.Net.Documents.Document doc = new Document();
+            string fieldName = (indexFieldName == IndexFieldName.Id) ? ID_FN :
+                               (indexFieldName == IndexFieldName.Title) ? TITLE_FN :
+                               (indexFieldName == IndexFieldName.Author) ? AUTHOR_FN :
+                               (indexFieldName == IndexFieldName.Bibliography) ? BIBLIOGRAPHY_FN :
+                               ABSTRACT_FN;
+            Lucene.Net.Documents.Field field = new Field(fieldName, text, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Lucene.Net.Documents.Document doc = new Lucene.Net.Documents.Document();
             doc.Add(field);
             writer.AddDocument(doc);
         }
@@ -120,9 +145,15 @@ namespace EduSearch.Models
         /// <summary>
         /// Creates parser
         /// </summary>
-        public void CreateParser()
+        /// <param name="indexFieldName">Index field name</param>
+        public void CreateParser(IndexFieldName indexFieldName)
         {
-            parser = new QueryParser(VERSION, TEXT_FN, analyzer);
+            string fieldName = (indexFieldName == IndexFieldName.Id) ? ID_FN :
+                               (indexFieldName == IndexFieldName.Title) ? TITLE_FN :
+                               (indexFieldName == IndexFieldName.Author) ? AUTHOR_FN :
+                               (indexFieldName == IndexFieldName.Bibliography) ? BIBLIOGRAPHY_FN :
+                               ABSTRACT_FN;
+            parser = new QueryParser(VERSION, fieldName, analyzer);
         }
 
         /// <summary>

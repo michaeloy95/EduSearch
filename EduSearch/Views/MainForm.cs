@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EduSearch.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,6 +22,11 @@ namespace EduSearch.Views
         /// Path to index
         /// </summary>
         private static string IndexLocation;
+
+        /// <summary>
+        /// Search Engine object
+        /// </summary>
+        private static SearchEngine searchEngine;
 
         /// <summary>
         /// Gives shadow of the form
@@ -71,6 +77,9 @@ namespace EduSearch.Views
             this.tbIndexLocation.ForeColor = Themes.FlatBlue.TEXT_TEXTBOX_COLOR;
         }
 
+        /// <summary>
+        /// Prepare controls and show splash
+        /// </summary>
         private void StartUpApp()
         {
             // Hide all controls
@@ -81,7 +90,7 @@ namespace EduSearch.Views
 
             //Create Title label
             Custom.CustomLabel lblSplashTitle = new Custom.CustomLabel();
-            lblSplashTitle.Font = new Font("Forte", 48F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            lblSplashTitle.Font = new Font("Forte", 48F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(byte.MinValue)));
             lblSplashTitle.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
             lblSplashTitle.Location = new Point(287, 220);
             lblSplashTitle.Size = new Size(303, 103);
@@ -107,6 +116,7 @@ namespace EduSearch.Views
             folderBrowserDialog.SelectedPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
 
+        #region Navigation Panel Settings
         /// <summary>
         /// Move Main Form on Mouse Down
         /// </summary>
@@ -117,7 +127,7 @@ namespace EduSearch.Views
             if (e.Button == MouseButtons.Left)
             {
                 Common.Navigation.ReleaseCapture();
-                Common.Navigation.SendMessage(Handle, Common.Navigation.WM_NCLBUTTONDOWN, Common.Navigation.HT_CAPTION, 0);
+                Common.Navigation.SendMessage(Handle, Common.Navigation.WM_NCLBUTTONDOWN, Common.Navigation.HT_CAPTION, byte.MinValue);
             }
         }
 
@@ -220,12 +230,30 @@ namespace EduSearch.Views
         {
             this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR;
         }
+        #endregion
+
+        /// <summary>
+        /// Insert message to log
+        /// </summary>
+        /// <param name="message">Message</param>
+        private void AddLog(string message)
+        {
+            const int H_MAX_CHARS = 50;
+            while (message.Length > H_MAX_CHARS)
+            {
+                int cutIndex = message.Substring(byte.MinValue, H_MAX_CHARS).LastIndexOfAny(new char[] { ' ' });
+
+                lbLog.Items.Add(message.Substring(byte.MinValue, cutIndex).Trim());
+                message = message.Substring(cutIndex, message.Length - cutIndex);
+            }
+            this.lbLog.Items.Add(message.Trim());
+        }
 
         /// <summary>
         /// Lookup for collection location
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
         private void tbCollection_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
@@ -243,8 +271,8 @@ namespace EduSearch.Views
         /// <summary>
         /// Lookup for index location
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
         private void tbIndexLocation_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
@@ -262,20 +290,155 @@ namespace EduSearch.Views
         /// <summary>
         /// Begin indexing
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
         private void btnIndex_Click(object sender, EventArgs e)
         {
+            DateTime startTime;
+            searchEngine = new SearchEngine();
+
+            this.AddLog("Allocating documents...");
+            startTime = DateTime.Now;
+            List<Document> foundDocuments = RecursivelyGenerateDocuments(CollectionLocation);
+            this.AddLog($"Documents successfully allocated in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
+            
+            this.AddLog("Creating index.");
+            searchEngine.CreateIndex(IndexLocation + @"\myIndex");
+
+            this.AddLog("Start indexing...");
+            startTime = DateTime.Now;
+            foreach (Document document in foundDocuments)
+            {
+                searchEngine.IndexText(document.Id, SearchEngine.IndexFieldName.Id);
+                searchEngine.IndexText(document.Title, SearchEngine.IndexFieldName.Title);
+                searchEngine.IndexText(document.Author, SearchEngine.IndexFieldName.Author);
+                searchEngine.IndexText(document.Bibliography, SearchEngine.IndexFieldName.Bibliography);
+                searchEngine.IndexText(document.Abstract, SearchEngine.IndexFieldName.Abstract);
+
+                this.AddLog("");
+                this.AddLog("> " + document.Id);
+                this.AddLog("> " + document.Title);
+                this.AddLog("> " + document.Author);
+                this.AddLog("> " + document.Bibliography);
+                this.AddLog("> " + document.Abstract);
+            }
+            this.AddLog($"All documents have been indexed in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
+
             searchPanel.Visible = true;
         }
 
         /// <summary>
-        /// Insert message to log
+        /// Recursively iterate files and directories from the root
         /// </summary>
-        /// <param name="message">message</param>
-        private void AddLog(string message)
+        /// <param name="path">Path to root directory</param>
+        /// <returns>List of structured documents</returns>
+        private List<Document> RecursivelyGenerateDocuments(string path)
         {
-            this.lbLog.Items.Add(message);
+            System.IO.DirectoryInfo root = new System.IO.DirectoryInfo(path);
+            System.IO.FileInfo[] files = null;
+            System.IO.DirectoryInfo[] subDirs = null;
+            List<Document> documents = new List<Document>();
+
+            try
+            {
+                files = root.GetFiles("*.txt");
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                this.AddLog(e.Message);
+            }
+            catch (System.IO.DirectoryNotFoundException e)
+            {
+                this.AddLog(e.Message);
+            }
+
+            if (files != null)
+            {
+                foreach (System.IO.FileInfo fi in files)
+                {
+                    string name = fi.FullName;
+                    documents.Add(ExtractDocument(name));
+                }
+                
+                subDirs = root.GetDirectories();
+
+                foreach (System.IO.DirectoryInfo dirInfo in subDirs)
+                {
+                    string name = dirInfo.FullName;
+                    documents.AddRange(this.RecursivelyGenerateDocuments(name));
+                }
+            }
+
+            return documents;
+        }
+
+        /// <summary>
+        /// Extract the text into structured document
+        /// </summary>
+        /// <param name="path">Path to text</param>
+        /// <returns>Document object</returns>
+        private Document ExtractDocument(string path)
+        {
+            Document document = new Document();
+            System.IO.StreamReader reader = new System.IO.StreamReader(path);
+
+            try
+            {
+                using (reader)
+                {
+                    string line;
+                    bool author = false, bibli = false, content = false;
+
+                    document.Id = reader.ReadLine().Split()[1];
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        switch (line)
+                        {
+                            case ".T":
+                                break;
+                            case ".A":
+                                author = true;
+                                break;
+                            case ".B":
+                                bibli = true;
+                                break;
+                            case ".W":
+                                content = true;
+                                break;
+                            default:
+                                if (content)
+                                {
+                                    document.Abstract += line + " ";
+                                }
+                                else if (bibli)
+                                {
+                                    document.Bibliography += line + " ";
+                                }
+                                else if (author)
+                                {
+                                    document.Author += line + " ";
+                                }
+                                else
+                                {
+                                    document.Title += line + " ";
+                                }
+                                break;
+                        }
+                    }
+                }
+                if (document.Abstract.Contains(document.Title))
+                {
+                    // BUG: Abstract not removing title
+                    int index = document.Abstract.IndexOf(document.Title);
+                    document.Abstract.Remove(index, document.Title.Length);
+                }
+            }
+            catch (Exception e)
+            {
+                this.AddLog(e.Message);
+            }
+
+            return document;
         }
     }
 }

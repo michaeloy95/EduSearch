@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bunifu_UI_v1.52">
-      <HintPath>..\..\..\..\..\Downloads\Bunifu_UI_v1.52.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -95,6 +92,7 @@
     <Compile Include="Custom\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Models\Document.cs" />
     <Compile Include="Models\SearchEngine.cs" />
     <Compile Include="Themes\FlatBlue.cs" />
     <Compile Include="Views\MainForm.cs">

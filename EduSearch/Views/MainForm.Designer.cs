@@ -33,6 +33,9 @@
             this.lblExit = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.bodyPanel = new EduSearch.Custom.CustomPanel();
+            this.searchPanel = new EduSearch.Custom.CustomPanel();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.tbSearch = new System.Windows.Forms.TextBox();
             this.leftPanel = new EduSearch.Custom.CustomPanel();
             this.lblLog = new System.Windows.Forms.Label();
             this.lbLog = new System.Windows.Forms.ListBox();
@@ -43,15 +46,12 @@
             this.tbIndexLocation = new System.Windows.Forms.TextBox();
             this.tbCollection = new System.Windows.Forms.TextBox();
             this.lblTitle = new EduSearch.Custom.CustomLabel();
-            this.searchPanel = new EduSearch.Custom.CustomPanel();
-            this.tbSearch = new System.Windows.Forms.TextBox();
-            this.btnSearch = new System.Windows.Forms.Button();
             this.navPanel.SuspendLayout();
             this.bodyPanel.SuspendLayout();
+            this.searchPanel.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.indexPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.searchPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // navPanel
@@ -123,6 +123,35 @@
             this.bodyPanel.Size = new System.Drawing.Size(876, 509);
             this.bodyPanel.TabIndex = 3;
             // 
+            // searchPanel
+            // 
+            this.searchPanel.Controls.Add(this.btnSearch);
+            this.searchPanel.Controls.Add(this.tbSearch);
+            this.searchPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.searchPanel.Location = new System.Drawing.Point(287, 0);
+            this.searchPanel.Name = "searchPanel";
+            this.searchPanel.Size = new System.Drawing.Size(589, 509);
+            this.searchPanel.TabIndex = 5;
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Font = new System.Drawing.Font("Yu Gothic UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearch.Location = new System.Drawing.Point(465, 47);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(69, 37);
+            this.btnSearch.TabIndex = 6;
+            this.btnSearch.Text = "Search";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            // 
+            // tbSearch
+            // 
+            this.tbSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbSearch.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSearch.Location = new System.Drawing.Point(60, 49);
+            this.tbSearch.Name = "tbSearch";
+            this.tbSearch.Size = new System.Drawing.Size(408, 33);
+            this.tbSearch.TabIndex = 0;
+            // 
             // leftPanel
             // 
             this.leftPanel.Controls.Add(this.lblLog);
@@ -131,7 +160,7 @@
             this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftPanel.Location = new System.Drawing.Point(0, 0);
             this.leftPanel.Name = "leftPanel";
-            this.leftPanel.Size = new System.Drawing.Size(202, 509);
+            this.leftPanel.Size = new System.Drawing.Size(287, 509);
             this.leftPanel.TabIndex = 4;
             // 
             // lblLog
@@ -149,10 +178,12 @@
             this.lbLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lbLog.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbLog.FormattingEnabled = true;
-            this.lbLog.Location = new System.Drawing.Point(3, 257);
+            this.lbLog.HorizontalExtent = 100;
+            this.lbLog.HorizontalScrollbar = true;
+            this.lbLog.Location = new System.Drawing.Point(4, 257);
             this.lbLog.Name = "lbLog";
             this.lbLog.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.lbLog.Size = new System.Drawing.Size(195, 247);
+            this.lbLog.Size = new System.Drawing.Size(278, 247);
             this.lbLog.TabIndex = 4;
             this.lbLog.TabStop = false;
             // 
@@ -166,12 +197,12 @@
             this.indexPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.indexPanel.Location = new System.Drawing.Point(0, 0);
             this.indexPanel.Name = "indexPanel";
-            this.indexPanel.Size = new System.Drawing.Size(202, 228);
+            this.indexPanel.Size = new System.Drawing.Size(287, 228);
             this.indexPanel.TabIndex = 3;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(57, 158);
+            this.pictureBox1.Location = new System.Drawing.Point(103, 157);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(80, 60);
             this.pictureBox1.TabIndex = 5;
@@ -180,10 +211,10 @@
             // lblIndex
             // 
             this.lblIndex.Font = new System.Drawing.Font("Yu Gothic UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIndex.Location = new System.Drawing.Point(27, 6);
+            this.lblIndex.Location = new System.Drawing.Point(15, 6);
             this.lblIndex.Margin = new System.Windows.Forms.Padding(0);
             this.lblIndex.Name = "lblIndex";
-            this.lblIndex.Size = new System.Drawing.Size(139, 31);
+            this.lblIndex.Size = new System.Drawing.Size(256, 31);
             this.lblIndex.TabIndex = 0;
             this.lblIndex.Text = "Index";
             this.lblIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -192,9 +223,9 @@
             // 
             this.btnIndex.Enabled = false;
             this.btnIndex.Font = new System.Drawing.Font("Yu Gothic UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIndex.Location = new System.Drawing.Point(12, 111);
+            this.btnIndex.Location = new System.Drawing.Point(15, 112);
             this.btnIndex.Name = "btnIndex";
-            this.btnIndex.Size = new System.Drawing.Size(174, 35);
+            this.btnIndex.Size = new System.Drawing.Size(256, 35);
             this.btnIndex.TabIndex = 3;
             this.btnIndex.Text = "Create Index";
             this.btnIndex.UseVisualStyleBackColor = true;
@@ -206,10 +237,10 @@
             this.tbIndexLocation.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbIndexLocation.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbIndexLocation.ForeColor = System.Drawing.Color.Black;
-            this.tbIndexLocation.Location = new System.Drawing.Point(12, 72);
+            this.tbIndexLocation.Location = new System.Drawing.Point(15, 72);
             this.tbIndexLocation.Name = "tbIndexLocation";
             this.tbIndexLocation.ReadOnly = true;
-            this.tbIndexLocation.Size = new System.Drawing.Size(174, 19);
+            this.tbIndexLocation.Size = new System.Drawing.Size(256, 19);
             this.tbIndexLocation.TabIndex = 1;
             this.tbIndexLocation.Text = "<index location>";
             this.tbIndexLocation.Click += new System.EventHandler(this.tbIndexLocation_Click);
@@ -220,10 +251,10 @@
             this.tbCollection.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbCollection.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbCollection.ForeColor = System.Drawing.Color.Black;
-            this.tbCollection.Location = new System.Drawing.Point(12, 42);
+            this.tbCollection.Location = new System.Drawing.Point(15, 42);
             this.tbCollection.Name = "tbCollection";
             this.tbCollection.ReadOnly = true;
-            this.tbCollection.Size = new System.Drawing.Size(174, 19);
+            this.tbCollection.Size = new System.Drawing.Size(256, 19);
             this.tbCollection.TabIndex = 0;
             this.tbCollection.Text = "<collection>";
             this.tbCollection.Click += new System.EventHandler(this.tbCollection_Click);
@@ -238,35 +269,6 @@
             this.lblTitle.TabIndex = 4;
             this.lblTitle.Text = "EduSearch";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // searchPanel
-            // 
-            this.searchPanel.Controls.Add(this.btnSearch);
-            this.searchPanel.Controls.Add(this.tbSearch);
-            this.searchPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.searchPanel.Location = new System.Drawing.Point(202, 0);
-            this.searchPanel.Name = "searchPanel";
-            this.searchPanel.Size = new System.Drawing.Size(674, 509);
-            this.searchPanel.TabIndex = 5;
-            // 
-            // tbSearch
-            // 
-            this.tbSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbSearch.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSearch.Location = new System.Drawing.Point(91, 49);
-            this.tbSearch.Name = "tbSearch";
-            this.tbSearch.Size = new System.Drawing.Size(408, 33);
-            this.tbSearch.TabIndex = 0;
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.Font = new System.Drawing.Font("Yu Gothic UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSearch.Location = new System.Drawing.Point(496, 47);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(69, 37);
-            this.btnSearch.TabIndex = 6;
-            this.btnSearch.Text = "Search";
-            this.btnSearch.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -284,12 +286,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.navPanel.ResumeLayout(false);
             this.bodyPanel.ResumeLayout(false);
+            this.searchPanel.ResumeLayout(false);
+            this.searchPanel.PerformLayout();
             this.leftPanel.ResumeLayout(false);
             this.indexPanel.ResumeLayout(false);
             this.indexPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.searchPanel.ResumeLayout(false);
-            this.searchPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
