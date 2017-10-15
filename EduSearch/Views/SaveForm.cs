@@ -78,8 +78,8 @@ namespace EduSearch.Views
         /// <summary>
         /// Move Main Form on Mouse Down
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">mouse event arguments</param>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Mouse event arguments</param>
         private void NavPanel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)

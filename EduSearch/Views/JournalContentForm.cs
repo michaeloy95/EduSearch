@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EduSearch.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,51 +13,91 @@ namespace EduSearch.Views
 {
     public partial class JournalContentForm : Form
     {
-        public JournalContentForm()
+        /// <summary>
+        /// Current form theme
+        /// </summary>
+        private Themes.Theme CurrentTheme;
+
+        /// <summary>
+        /// Current document
+        /// </summary>
+        private Document CurrentDocument;
+
+        /// <summary>
+        /// Gives shadow of the form
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                const int CS_DROPSHADOW = 0x20000;
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
+
+        /// <summary>
+        /// JournalContentForm default constructor
+        /// </summary>
+        public JournalContentForm(Themes.Theme CurrentTheme, Document CurrentDocument)
         {
             InitializeComponent();
-            ApplyTheme();
-            InitialContentComponentsLocation();
+
+            this.CurrentDocument = CurrentDocument;
+            ApplyTheme(CurrentTheme);
+
+            AllocateDocuments(this.CurrentDocument);
         }
+
         /// <summary>
         /// Apply the control's style specified in Themes.Theme
         /// </summary>
-        private void ApplyTheme()
+        private void ApplyTheme(Themes.Theme theme)
         {
+            //select theme
+            this.CurrentTheme = theme;
+
             //navigation panel
+            this.navPanel.BackColor = this.CurrentTheme.BACKGROUND_NAVIGATION_COLOR;
+            this.lblExit.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
         }
-        /// <summary>
-        /// Initialize location of content's components
-        /// </summary>
-        private void InitialContentComponentsLocation()
-        {
-            lblAuthorTitle.Location = new Point(3, 6);
-            lblAuthorContent.Location = new Point(lblAuthorTitle.Location.X, lblAuthorTitle.Location.Y + 30);
 
-            lblBilbliographyTitle.Location = new Point(lblAuthorContent.Location.X, lblAuthorContent.Location.Y + 51);
-            lblBilbliographyContent.Location = new Point(lblBilbliographyTitle.Location.X, lblBilbliographyTitle.Location.Y + 30);
-
-            lblAbstractTitle.Location = new Point(lblBilbliographyContent.Location.X, lblBilbliographyContent.Location.Y + 51);
-            lblAbstractContent.Location = new Point(lblAbstractTitle.Location.X, lblAbstractTitle.Location.Y + 30);
-        }
         /// <summary>
-        /// Load journal content form
+        /// Initialise location of content's components
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
-        private void JournalContentForm_Load(object sender, EventArgs e)
+        private void AllocateDocuments(Document CurrentDocument)
         {
+            this.lblJournalTitle.Text = CurrentDocument.Title;
 
+            this.lblAuthorTitle.Location = new Point(3, 6);
+            this.lblAuthorContent.Location = new Point(this.lblAuthorTitle.Location.X, this.lblAuthorTitle.Location.Y + 30);
+            this.lblAuthorContent.Text = CurrentDocument.Author;
+
+            this.lblBilbliographyTitle.Location = new Point(this.lblAuthorContent.Location.X, this.lblAuthorContent.Location.Y + 51);
+            this.lblBilbliographyContent.Location = new Point(this.lblBilbliographyTitle.Location.X, this.lblBilbliographyTitle.Location.Y + 30);
+            this.lblBilbliographyContent.Text = CurrentDocument.Bibliography;
+
+            this.lblAbstractTitle.Location = new Point(this.lblBilbliographyContent.Location.X, this.lblBilbliographyContent.Location.Y + 51);
+            this.lblAbstractContent.Location = new Point(this.lblAbstractTitle.Location.X, this.lblAbstractTitle.Location.Y + 30);
+            this.lblAbstractContent.Text = CurrentDocument.Abstract;
         }
+
+        #region Navigation Panel Settings
         /// <summary>
-        /// Click minimise button
+        /// Move Main Form on Mouse Down
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
-        private void lblMinim_Click(object sender, EventArgs e)
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Mouse event arguments</param>
+        private void NavPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+            if (e.Button == MouseButtons.Left)
+            {
+                Common.Navigation.ReleaseCapture();
+                Common.Navigation.SendMessage(Handle, Common.Navigation.WM_NCLBUTTONDOWN, Common.Navigation.HT_CAPTION, byte.MinValue);
+            }
         }
+
         /// <summary>
         /// Click exit button
         /// </summary>
@@ -74,70 +115,38 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblExit_MouseDown(object sender, MouseEventArgs e)
         {
-            this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKCLICK_COLOR;
+            this.lblExit.BackColor = CurrentTheme.TEXT_BACKCLICK_COLOR;
         }
+
         /// <summary>
         /// Hover exit button
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
         private void lblExit_MouseHover(object sender, EventArgs e)
         {
-            this.lblExit.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR_R;
+            this.lblExit.BackColor = CurrentTheme.TEXT_BACKHOVER_COLOR_R;
         }
+
         /// <summary>
         /// Leave exit button
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
         private void lblExit_MouseLeave(object sender, EventArgs e)
         {
             this.lblExit.BackColor = Color.Transparent;
         }
+
         /// <summary>
         /// Up exit button
         /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
         private void lblExit_MouseUp(object sender, MouseEventArgs e)
         {
-            this.lblExit.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR_R;
+            this.lblExit.BackColor = CurrentTheme.TEXT_BACKHOVER_COLOR_R;
         }
-        /// <summary>
-        /// Down minimise button
-        /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
-        private void lblMinim_MouseDown(object sender, MouseEventArgs e)
-        {
-            this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKCLICK_COLOR;
-        }
-        /// <summary>
-        /// Hover minimise button
-        /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
-        private void lblMinim_MouseHover(object sender, EventArgs e)
-        {
-            this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR_R;
-        }
-        /// <summary>
-        /// Leave minimise button
-        /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
-        private void lblMinim_MouseLeave(object sender, EventArgs e)
-        {
-            this.lblMinim.BackColor = Color.Transparent;
-        }
-        /// <summary>
-        /// Up minimise button
-        /// </summary>
-        /// <param name="sender">object sender</param>
-        /// <param name="e">event arguments</param>
-        private void lblMinim_MouseUp(object sender, MouseEventArgs e)
-        {
-            this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR_R;
-        }
+        #endregion
     }
 }
