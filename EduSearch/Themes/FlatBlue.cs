@@ -2,61 +2,24 @@
 
 namespace EduSearch.Themes
 {
-    public class FlatBlue
+    public class FlatBlue : Theme
     {
         /// <summary>
-        /// Primary color on text
+        /// Flat Blue Theme default constructor
         /// </summary>
-        public static Color TEXT_PRIMARY_COLOR = Color.FromArgb(255, 255, 255);
-
-        /// <summary>
-        /// Secondary color on text
-        /// </summary>
-        public static Color TEXT_SECONDARY_COLOR = Color.FromArgb(236, 240, 241);
-
-        /// <summary>
-        /// Tertiary color on text
-        /// </summary>
-        public static Color TEXT_TERTIARY_COLOR = Color.FromArgb(189, 195, 199);
-
-        /// <summary>
-        /// Textbox color on text
-        /// </summary>
-        public static Color TEXT_TEXTBOX_COLOR = Color.FromArgb(127, 140, 141);
-
-        /// <summary>
-        /// Text's background color on mouse hover
-        /// </summary>
-        public static Color TEXT_BACKHOVER_COLOR = Color.FromArgb(94, 154, 193);
-
-        /// <summary>
-        /// Text's background color on mouse click
-        /// </summary>
-        public static Color TEXT_BACKCLICK_COLOR = Color.FromArgb(41, 102, 142);
-
-        /// <summary>
-        /// Text's background color on mouse hover
-        /// </summary>
-        public static Color TEXT_BACKHOVER_COLOR_R = Color.FromArgb(231, 76, 60);
-
-        /// <summary>
-        /// Text's background color on mouse click
-        /// </summary>
-        public static Color TEXT_BACKCLICK_COLOR_R = Color.FromArgb(192, 57, 43);
-
-        /// <summary>
-        /// Primary color on background
-        /// </summary>
-        public static Color BACKGROUND_PRIMARY_COLOR = Color.FromArgb(34, 167, 240);
-
-        /// <summary>
-        /// Secondary color on background
-        /// </summary>x
-        public static Color BACKGROUND_SECONDARY_COLOR = Color.FromArgb(52, 152, 219);
-
-        /// <summary>
-        /// Secondary color on background
-        /// </summary>x
-        public static Color BACKGROUND_NAVIGATION_COLOR = Color.FromArgb(41, 128, 185);
+        public FlatBlue()
+        {
+            TEXT_PRIMARY_COLOR = Color.FromArgb(255, 255, 255);
+            TEXT_SECONDARY_COLOR = Color.FromArgb(236, 240, 241);
+            TEXT_TERTIARY_COLOR = Color.FromArgb(189, 195, 199);
+            TEXT_TEXTBOX_COLOR = Color.FromArgb(25, 25, 25);
+            TEXT_BACKHOVER_COLOR = Color.FromArgb(94, 154, 193);
+            TEXT_BACKCLICK_COLOR = Color.FromArgb(41, 102, 142);
+            TEXT_BACKHOVER_COLOR_R = Color.FromArgb(231, 76, 60);
+            TEXT_BACKCLICK_COLOR_R = Color.FromArgb(192, 57, 43);
+            BACKGROUND_PRIMARY_COLOR = Color.FromArgb(34, 167, 240);
+            BACKGROUND_SECONDARY_COLOR = Color.FromArgb(52, 152, 219);
+            BACKGROUND_NAVIGATION_COLOR = Color.FromArgb(41, 128, 185);
+        }        
     }
 }

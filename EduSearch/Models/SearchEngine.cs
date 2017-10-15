@@ -109,18 +109,22 @@ namespace EduSearch.Models
         /// <summary>
         /// Indexes the given text
         /// </summary>
-        /// <param name="text">Text to index</param>
-        /// <param name="indexFieldName">Index field name</param>
-        public void IndexText(string text, IndexFieldName indexFieldName)
+        /// <param name="myDoc">Document to index</param>
+        public void IndexText(Document myDoc)
         {
-            string fieldName = (indexFieldName == IndexFieldName.Id) ? ID_FN :
-                               (indexFieldName == IndexFieldName.Title) ? TITLE_FN :
-                               (indexFieldName == IndexFieldName.Author) ? AUTHOR_FN :
-                               (indexFieldName == IndexFieldName.Bibliography) ? BIBLIOGRAPHY_FN :
-                               ABSTRACT_FN;
-            Lucene.Net.Documents.Field field = new Field(fieldName, text, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Lucene.Net.Documents.Field fieldID = new Field(ID_FN, myDoc.Id, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Lucene.Net.Documents.Field fieldAuthor = new Field(AUTHOR_FN, myDoc.Author, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Lucene.Net.Documents.Field fieldTitle = new Field(TITLE_FN, myDoc.Title, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Lucene.Net.Documents.Field fieldBibliography = new Field(BIBLIOGRAPHY_FN, myDoc.Bibliography, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Lucene.Net.Documents.Field fieldAbstract = new Field(ABSTRACT_FN, myDoc.Abstract, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+
             Lucene.Net.Documents.Document doc = new Lucene.Net.Documents.Document();
-            doc.Add(field);
+            doc.Add(fieldID);
+            doc.Add(fieldAuthor);
+            doc.Add(fieldTitle);
+            doc.Add(fieldBibliography);
+            doc.Add(fieldAbstract);
+
             writer.AddDocument(doc);
         }
 
@@ -161,11 +165,23 @@ namespace EduSearch.Models
         /// </summary>
         /// <param name="query">The search query</param>
         /// <returns>Ranked list of relevant documents</returns>
-        public TopDocs SearchIndex(string query)
+        public List<Document> SearchIndex(string query)
         {
             Query q = parser.Parse(query);
             TopDocs td = searcher.Search(q, 100);
-            return td;
+
+            List<Document> docs = new List<Document>();
+            foreach (ScoreDoc sd in td.ScoreDocs)
+            {
+                Document doc = new Document();
+                doc.Id = searcher.Doc(sd.Doc).Get(ID_FN).ToString();
+                doc.Author = searcher.Doc(sd.Doc).Get(AUTHOR_FN).ToString();
+                doc.Title = searcher.Doc(sd.Doc).Get(TITLE_FN).ToString();
+                doc.Bibliography = searcher.Doc(sd.Doc).Get(BIBLIOGRAPHY_FN).ToString();
+                doc.Abstract = searcher.Doc(sd.Doc).Get(ABSTRACT_FN).ToString();
+                docs.Add(doc);
+            }
+            return docs;
         }
 
         /// <summary>

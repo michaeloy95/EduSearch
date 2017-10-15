@@ -14,19 +14,44 @@ namespace EduSearch.Views
     public partial class MainForm : Form
     {
         /// <summary>
+        /// All document colletion
+        /// </summary>
+        private Dictionary<string, Document> Dictionary;
+
+        /// <summary>
         /// Path to collection
         /// </summary>
-        private static string CollectionLocation;
+        private string CollectionLocation;
 
         /// <summary>
         /// Path to index
         /// </summary>
-        private static string IndexLocation;
+        private string IndexLocation;
 
         /// <summary>
         /// Search Engine object
         /// </summary>
-        private static SearchEngine searchEngine;
+        private SearchEngine SearchEngine;
+
+        /// <summary>
+        /// Current result page
+        /// </summary>
+        private int CurrentResultPage;
+
+        /// <summary>
+        /// Maximum documents retrieved per page
+        /// </summary>
+        private const int MaxResultPerPage = 10;
+
+        /// <summary>
+        /// Current result documents
+        /// </summary>
+        private List<Document> CurrentResultDocs;
+
+        /// <summary>
+        /// Current form theme
+        /// </summary>
+        private Themes.Theme CurrentTheme;
 
         /// <summary>
         /// Gives shadow of the form
@@ -48,33 +73,40 @@ namespace EduSearch.Views
         public MainForm()
         {
             InitializeComponent();
-            ApplyTheme();
+            ApplyTheme(new Themes.FlatBlue());
             StartUpApp();
         }
 
         /// <summary>
         /// Apply the control's style specified in Themes.Theme
         /// </summary>
-        private void ApplyTheme()
+        private void ApplyTheme(Themes.Theme theme)
         {
+            //select theme
+            this.CurrentTheme = theme;
+
             //main form
-            this.BackColor = Themes.FlatBlue.BACKGROUND_PRIMARY_COLOR;
+            this.BackColor = this.CurrentTheme.BACKGROUND_PRIMARY_COLOR;
 
             //navigation panel
-            this.navPanel.BackColor = Themes.FlatBlue.BACKGROUND_NAVIGATION_COLOR;
-            this.lblExit.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
-            this.lblMinim.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
-            this.lblTitle.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
+            this.navPanel.BackColor = this.CurrentTheme.BACKGROUND_NAVIGATION_COLOR;
+            this.lblExit.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+            this.lblMinim.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+            this.lblTitle.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
 
             //left panel
-            this.leftPanel.BackColor = Themes.FlatBlue.BACKGROUND_SECONDARY_COLOR;
-            this.lblLog.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
+            this.leftPanel.BackColor = this.CurrentTheme.BACKGROUND_SECONDARY_COLOR;
+            this.lblLog.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
 
             //index panel
-            this.indexPanel.BackColor = Themes.FlatBlue.BACKGROUND_SECONDARY_COLOR;
-            this.lblIndex.ForeColor = Themes.FlatBlue.TEXT_SECONDARY_COLOR;
-            this.tbCollection.ForeColor = Themes.FlatBlue.TEXT_TEXTBOX_COLOR;
-            this.tbIndexLocation.ForeColor = Themes.FlatBlue.TEXT_TEXTBOX_COLOR;
+            this.indexPanel.BackColor = this.CurrentTheme.BACKGROUND_SECONDARY_COLOR;
+            this.lblIndex.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
+            this.tbCollection.ForeColor = this.CurrentTheme.TEXT_TEXTBOX_COLOR;
+            this.tbIndexLocation.ForeColor = this.CurrentTheme.TEXT_TEXTBOX_COLOR;
+
+            //result panel
+            this.lblSearchTime.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
+            this.lblPage.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
         }
 
         /// <summary>
@@ -91,7 +123,7 @@ namespace EduSearch.Views
             //Create Title label
             Custom.CustomLabel lblSplashTitle = new Custom.CustomLabel();
             lblSplashTitle.Font = new Font("Forte", 48F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(byte.MinValue)));
-            lblSplashTitle.ForeColor = Themes.FlatBlue.TEXT_PRIMARY_COLOR;
+            lblSplashTitle.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
             lblSplashTitle.Location = new Point(287, 220);
             lblSplashTitle.Size = new Size(303, 103);
             lblSplashTitle.Text = "EduSearch";
@@ -113,7 +145,7 @@ namespace EduSearch.Views
             //Hide all controls in Search
             this.searchPanel.Visible = false;
 
-            folderBrowserDialog.SelectedPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            this.folderBrowserDialog.SelectedPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
 
         #region Navigation Panel Settings
@@ -148,7 +180,7 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblExit_MouseHover(object sender, EventArgs e)
         {
-            this.lblExit.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR_R;
+            this.lblExit.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR_R;
         }
         
         /// <summary>
@@ -158,7 +190,7 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblExit_MouseDown(object sender, MouseEventArgs e)
         {
-            this.lblExit.BackColor = Themes.FlatBlue.TEXT_BACKCLICK_COLOR_R;
+            this.lblExit.BackColor = this.CurrentTheme.TEXT_BACKCLICK_COLOR_R;
         }
 
         /// <summary>
@@ -178,7 +210,7 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblExit_MouseUp(object sender, MouseEventArgs e)
         {
-            this.lblExit.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR_R;
+            this.lblExit.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR_R;
         }
 
         /// <summary>
@@ -198,7 +230,7 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblMinim_MouseHover(object sender, EventArgs e)
         {
-            this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR;
+            this.lblMinim.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR;
         }
 
         /// <summary>
@@ -208,7 +240,7 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblMinim_MouseDown(object sender, MouseEventArgs e)
         {
-            this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKCLICK_COLOR;
+            this.lblMinim.BackColor = this.CurrentTheme.TEXT_BACKCLICK_COLOR;
         }
 
         /// <summary>
@@ -228,7 +260,7 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblMinim_MouseUp(object sender, MouseEventArgs e)
         {
-            this.lblMinim.BackColor = Themes.FlatBlue.TEXT_BACKHOVER_COLOR;
+            this.lblMinim.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR;
         }
         #endregion
 
@@ -236,14 +268,14 @@ namespace EduSearch.Views
         /// Insert message to log
         /// </summary>
         /// <param name="message">Message</param>
-        private void AddLog(string message)
+        public void AddLog(string message)
         {
             const int H_MAX_CHARS = 50;
             while (message.Length > H_MAX_CHARS)
             {
                 int cutIndex = message.Substring(byte.MinValue, H_MAX_CHARS).LastIndexOfAny(new char[] { ' ' });
 
-                lbLog.Items.Add(message.Substring(byte.MinValue, cutIndex).Trim());
+                this.lbLog.Items.Add(message.Substring(byte.MinValue, cutIndex).Trim());
                 message = message.Substring(cutIndex, message.Length - cutIndex);
             }
             this.lbLog.Items.Add(message.Trim());
@@ -256,14 +288,14 @@ namespace EduSearch.Views
         /// <param name="e">Event arguments</param>
         private void tbCollection_Click(object sender, EventArgs e)
         {
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            if (this.folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                this.tbCollection.Text = folderBrowserDialog.SelectedPath;
-                CollectionLocation = folderBrowserDialog.SelectedPath;
+                this.tbCollection.Text = this.folderBrowserDialog.SelectedPath;
+                this.CollectionLocation = this.folderBrowserDialog.SelectedPath;
 
-                if (!String.IsNullOrEmpty(CollectionLocation) && !String.IsNullOrEmpty(IndexLocation))
+                if (!String.IsNullOrEmpty(this.CollectionLocation) && !String.IsNullOrEmpty(this.IndexLocation))
                 {
-                    btnIndex.Enabled = true;
+                    this.btnIndex.Enabled = true;
                 }
             }
         }
@@ -275,14 +307,14 @@ namespace EduSearch.Views
         /// <param name="e">Event arguments</param>
         private void tbIndexLocation_Click(object sender, EventArgs e)
         {
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            if (this.folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                this.tbIndexLocation.Text = folderBrowserDialog.SelectedPath;
-                IndexLocation = folderBrowserDialog.SelectedPath;
+                this.tbIndexLocation.Text = this.folderBrowserDialog.SelectedPath;
+                this.IndexLocation = this.folderBrowserDialog.SelectedPath;
 
-                if (!String.IsNullOrEmpty(CollectionLocation) && !String.IsNullOrEmpty(IndexLocation))
+                if (!String.IsNullOrEmpty(this.CollectionLocation) && !String.IsNullOrEmpty(this.IndexLocation))
                 {
-                    btnIndex.Enabled = true;
+                    this.btnIndex.Enabled = true;
                 }
             }
         }
@@ -295,36 +327,34 @@ namespace EduSearch.Views
         private void btnIndex_Click(object sender, EventArgs e)
         {
             DateTime startTime;
-            searchEngine = new SearchEngine();
+            this.SearchEngine = new SearchEngine();
 
             this.AddLog("Allocating documents...");
             startTime = DateTime.Now;
-            List<Document> foundDocuments = RecursivelyGenerateDocuments(CollectionLocation);
+
+            List<Document> foundDocuments = RecursivelyGenerateDocuments(this.CollectionLocation);
+            this.Dictionary = new Dictionary<string, Document>();
+            foreach (Document document in foundDocuments)
+            {
+                this.Dictionary.Add(document.Id, document);
+            }
+
             this.AddLog($"Documents successfully allocated in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
             
-            this.AddLog("Creating index.");
-            searchEngine.CreateIndex(IndexLocation + @"\myIndex");
+            this.SearchEngine.CreateIndex(this.IndexLocation);
 
             this.AddLog("Start indexing...");
             startTime = DateTime.Now;
-            foreach (Document document in foundDocuments)
-            {
-                searchEngine.IndexText(document.Id, SearchEngine.IndexFieldName.Id);
-                searchEngine.IndexText(document.Title, SearchEngine.IndexFieldName.Title);
-                searchEngine.IndexText(document.Author, SearchEngine.IndexFieldName.Author);
-                searchEngine.IndexText(document.Bibliography, SearchEngine.IndexFieldName.Bibliography);
-                searchEngine.IndexText(document.Abstract, SearchEngine.IndexFieldName.Abstract);
 
-                this.AddLog("");
-                this.AddLog("> " + document.Id);
-                this.AddLog("> " + document.Title);
-                this.AddLog("> " + document.Author);
-                this.AddLog("> " + document.Bibliography);
-                this.AddLog("> " + document.Abstract);
+            foreach (Document document in foundDocuments)
+            {            
+                this.SearchEngine.IndexText(document);
             }
+
             this.AddLog($"All documents have been indexed in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
 
-            searchPanel.Visible = true;
+            this.SearchEngine.CleanUpIndexer();
+            this.searchPanel.Visible = true;
         }
 
         /// <summary>
@@ -357,7 +387,7 @@ namespace EduSearch.Views
                 foreach (System.IO.FileInfo fi in files)
                 {
                     string name = fi.FullName;
-                    documents.Add(ExtractDocument(name));
+                    documents.Add(this.ExtractDocument(name));
                 }
                 
                 subDirs = root.GetDirectories();
@@ -389,7 +419,9 @@ namespace EduSearch.Views
                     string line;
                     bool author = false, bibli = false, content = false;
 
+                    //Take document ID
                     document.Id = reader.ReadLine().Split()[1];
+
                     while ((line = reader.ReadLine()) != null)
                     {
                         switch (line)
@@ -426,12 +458,11 @@ namespace EduSearch.Views
                         }
                     }
                 }
-                if (document.Abstract.Contains(document.Title))
+                if (document.Abstract.Contains(document.Title) && !string.IsNullOrEmpty(document.Title))
                 {
-                    // BUG: Abstract not removing title
-                    int index = document.Abstract.IndexOf(document.Title);
-                    document.Abstract.Remove(index, document.Title.Length);
+                    document.Abstract = (document.Abstract.Replace(document.Title, ""));
                 }
+                document.Trim();
             }
             catch (Exception e)
             {
@@ -439,6 +470,164 @@ namespace EduSearch.Views
             }
 
             return document;
+        }
+
+        /// <summary>
+        /// Begin searching
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.tbSearch.Text))
+            {
+                this.SearchEngine.CreateSearcher();
+                this.SearchEngine.CreateParser(SearchEngine.IndexFieldName.Abstract);
+
+                this.CurrentResultDocs = new List<Document>();
+
+                try
+                {
+                    DateTime startTime = DateTime.Now;
+                    this.CurrentResultDocs = this.SearchEngine.SearchIndex(tbSearch.Text);
+                    double searchTime = (DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0;
+
+                    this.AddLog($"Search is done. {this.CurrentResultDocs.Count} documents found in {searchTime} seconds.");
+                    this.lblSearchTime.Text = $"{this.CurrentResultDocs.Count} documents found ({searchTime} seconds)";
+                    
+                    this.CurrentResultPage = 1;
+                    this.DisplayResults();
+
+                    this.lblPage.Text = $"{CurrentResultPage}/{(this.CurrentResultDocs.Count / MaxResultPerPage) + Math.Sign(this.CurrentResultDocs.Count % MaxResultPerPage)}";
+
+                    this.btnPrevPage.Enabled = false;
+                    if (CurrentResultDocs.Count <= MaxResultPerPage)
+                    {
+                        this.btnNextPage.Enabled = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.AddLog(ex.ToString());
+                }
+
+                this.btnPrevPage.Visible = true;
+                this.btnNextPage.Visible = true;
+                this.lblPage.Visible = true;
+                this.lblSearchTime.Visible = true;
+                this.btnSave.Visible = true;
+
+                this.SearchEngine.CleanUpSearcher();
+            }
+        }
+
+        /// <summary>
+        /// Draw the results list
+        /// </summary>
+        /// <param name="docs">Documents as search results</param>
+        private void DisplayResults()
+        {
+            this.resultPanel.Controls.Clear();
+
+            const int X_POS_TITLE = 15;
+            const int X_POS_OTHER = 20;
+            const int Y_POS_TITLE = 5;
+            const int Y_POS_DESC = 30;
+            const int Y_POST_ABSTRACT = 45;
+            const int Y_NEXT_RESULT = 90;
+
+            const int MAX_TITLE = 65;
+            const int MAX_DESC = 75;
+            const int MAX_ABSTRACT = 170;
+
+            int rank_pos = 0;
+            for (int i = ((this.CurrentResultPage - 1) * MaxResultPerPage); i < Math.Min(this.CurrentResultPage * MaxResultPerPage, this.CurrentResultDocs.Count); i++)
+            {
+                // display title
+                Label lblTitle = new Label();
+                lblTitle.AutoSize = false;
+                lblTitle.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                lblTitle.Location = new System.Drawing.Point(X_POS_TITLE, Y_POS_TITLE + (rank_pos * Y_NEXT_RESULT));
+                lblTitle.Size = new Size(490, 20);
+                lblTitle.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+                lblTitle.Text = (i+1).ToString() + ". " + char.ToUpper(CurrentResultDocs[i].Title[0]).ToString() + CurrentResultDocs[i].Title.Substring(1);
+                lblTitle.Text = (lblTitle.Text.Length >= MAX_TITLE) ? lblTitle.Text.Substring(byte.MinValue, MAX_TITLE).Trim() + "..." : lblTitle.Text;
+
+                // display description
+                Label lblDesc = new Label();
+                lblDesc.AutoSize = true;
+                lblDesc.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                lblDesc.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+                lblDesc.Location = new System.Drawing.Point(X_POS_OTHER, Y_POS_DESC + (rank_pos * Y_NEXT_RESULT));
+                lblDesc.Text = $"Document ID {CurrentResultDocs[i].Id}, by {CurrentResultDocs[i].Author}";
+                lblDesc.Text = (lblDesc.Text.Length >= MAX_DESC) ? lblDesc.Text.Substring(byte.MinValue, MAX_DESC).Trim() + "..." : lblDesc.Text;
+
+                // display abstract
+                Label lblAbstract = new Label();
+                lblAbstract.AutoSize = false;
+                lblAbstract.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                lblAbstract.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
+                lblAbstract.Location = new System.Drawing.Point(X_POS_OTHER, Y_POST_ABSTRACT + (rank_pos * Y_NEXT_RESULT));
+                lblAbstract.Size = new Size(490, 30);
+                lblAbstract.Text = char.ToUpper(CurrentResultDocs[i].Abstract[0]).ToString() + CurrentResultDocs[i].Abstract.Substring(1);
+                lblAbstract.Text = (lblAbstract.Text.Length >= MAX_ABSTRACT) ? lblAbstract.Text.Substring(byte.MinValue, MAX_ABSTRACT).Trim() + "..." : lblAbstract.Text;
+
+                // add all of them to panel
+                this.resultPanel.Controls.Add(lblTitle);
+                this.resultPanel.Controls.Add(lblDesc);
+                this.resultPanel.Controls.Add(lblAbstract);
+
+                rank_pos++;
+            }
+        }
+
+        /// <summary>
+        /// Go to previous result page
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void btnPrevPage_Click(object sender, EventArgs e)
+        {
+            this.CurrentResultPage--;
+            this.DisplayResults();
+
+            this.lblPage.Text = $"{CurrentResultPage}/{(this.CurrentResultDocs.Count / MaxResultPerPage) + Math.Sign(this.CurrentResultDocs.Count % MaxResultPerPage)}";
+
+            if (this.CurrentResultPage == 1)
+            {
+                this.btnPrevPage.Enabled = false;
+            }
+            this.btnNextPage.Enabled = true;
+        }
+
+        /// <summary>
+        /// Go to next result page
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void btnNextPage_Click(object sender, EventArgs e)
+        {
+            this.CurrentResultPage++;
+            this.DisplayResults();
+
+            this.lblPage.Text = $"{CurrentResultPage}/{(this.CurrentResultDocs.Count / MaxResultPerPage) + Math.Sign(this.CurrentResultDocs.Count % MaxResultPerPage)}";
+
+            if (this.CurrentResultDocs.Count <= (this.CurrentResultPage * MaxResultPerPage))
+            {
+                this.btnNextPage.Enabled = false;
+            }
+            this.btnPrevPage.Enabled = true;
+        }
+
+        /// <summary>
+        /// Open SaveForm
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveForm saveForm = new SaveForm(CurrentTheme, CurrentResultDocs);
+            saveForm.Show();
         }
     }
 }

@@ -34,15 +34,30 @@ namespace EduSearch.Models
         public string Abstract { get; set; }
 
         /// <summary>
+        /// Document's Score
+        /// </summary>
+        public double Score { get; set; }
+
+        /// <summary>
         /// Default Document constructor
         /// </summary>
         public Document()
         {
-            Id = string.Empty;
-            Title = string.Empty;
-            Author = string.Empty;
-            Bibliography = string.Empty;
-            Abstract = string.Empty;
+            this.Id = string.Empty;
+            this.Title = string.Empty;
+            this.Author = string.Empty;
+            this.Bibliography = string.Empty;
+            this.Abstract = string.Empty;
+            this.Score = 1;
+        }
+
+        public void Trim()
+        {
+            this.Id = this.Id.Trim();
+            this.Title = this.Title.Trim();
+            this.Author = this.Author.Trim();
+            this.Bibliography = this.Bibliography.Trim();
+            this.Abstract = this.Abstract.Trim();
         }
     }
 }

@@ -34,6 +34,12 @@
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.bodyPanel = new EduSearch.Custom.CustomPanel();
             this.searchPanel = new EduSearch.Custom.CustomPanel();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.lblPage = new EduSearch.Custom.CustomLabel();
+            this.lblSearchTime = new EduSearch.Custom.CustomLabel();
+            this.btnNextPage = new System.Windows.Forms.Button();
+            this.btnPrevPage = new System.Windows.Forms.Button();
+            this.resultPanel = new EduSearch.Custom.CustomPanel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.tbSearch = new System.Windows.Forms.TextBox();
             this.leftPanel = new EduSearch.Custom.CustomPanel();
@@ -125,6 +131,12 @@
             // 
             // searchPanel
             // 
+            this.searchPanel.Controls.Add(this.btnSave);
+            this.searchPanel.Controls.Add(this.lblPage);
+            this.searchPanel.Controls.Add(this.lblSearchTime);
+            this.searchPanel.Controls.Add(this.btnNextPage);
+            this.searchPanel.Controls.Add(this.btnPrevPage);
+            this.searchPanel.Controls.Add(this.resultPanel);
             this.searchPanel.Controls.Add(this.btnSearch);
             this.searchPanel.Controls.Add(this.tbSearch);
             this.searchPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -132,6 +144,69 @@
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Size = new System.Drawing.Size(589, 509);
             this.searchPanel.TabIndex = 5;
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(517, 93);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(47, 23);
+            this.btnSave.TabIndex = 12;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Visible = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // lblPage
+            // 
+            this.lblPage.AutoSize = true;
+            this.lblPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPage.Location = new System.Drawing.Point(274, 481);
+            this.lblPage.Name = "lblPage";
+            this.lblPage.Size = new System.Drawing.Size(40, 16);
+            this.lblPage.TabIndex = 11;
+            this.lblPage.Text = "1/100";
+            this.lblPage.Visible = false;
+            // 
+            // lblSearchTime
+            // 
+            this.lblSearchTime.AutoSize = true;
+            this.lblSearchTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSearchTime.Location = new System.Drawing.Point(57, 88);
+            this.lblSearchTime.Name = "lblSearchTime";
+            this.lblSearchTime.Size = new System.Drawing.Size(197, 16);
+            this.lblSearchTime.TabIndex = 10;
+            this.lblSearchTime.Text = "100 results found (0.07 seconds)";
+            this.lblSearchTime.Visible = false;
+            // 
+            // btnNextPage
+            // 
+            this.btnNextPage.Location = new System.Drawing.Point(489, 478);
+            this.btnNextPage.Name = "btnNextPage";
+            this.btnNextPage.Size = new System.Drawing.Size(75, 23);
+            this.btnNextPage.TabIndex = 9;
+            this.btnNextPage.Text = "Next";
+            this.btnNextPage.UseVisualStyleBackColor = true;
+            this.btnNextPage.Visible = false;
+            this.btnNextPage.Click += new System.EventHandler(this.btnNextPage_Click);
+            // 
+            // btnPrevPage
+            // 
+            this.btnPrevPage.Location = new System.Drawing.Point(30, 478);
+            this.btnPrevPage.Name = "btnPrevPage";
+            this.btnPrevPage.Size = new System.Drawing.Size(75, 23);
+            this.btnPrevPage.TabIndex = 8;
+            this.btnPrevPage.Text = "Previous";
+            this.btnPrevPage.UseVisualStyleBackColor = true;
+            this.btnPrevPage.Visible = false;
+            this.btnPrevPage.Click += new System.EventHandler(this.btnPrevPage_Click);
+            // 
+            // resultPanel
+            // 
+            this.resultPanel.AutoScroll = true;
+            this.resultPanel.Location = new System.Drawing.Point(30, 117);
+            this.resultPanel.Name = "resultPanel";
+            this.resultPanel.Size = new System.Drawing.Size(533, 355);
+            this.resultPanel.TabIndex = 7;
             // 
             // btnSearch
             // 
@@ -142,12 +217,14 @@
             this.btnSearch.TabIndex = 6;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // tbSearch
             // 
             this.tbSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbSearch.Font = new System.Drawing.Font("Calibri", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbSearch.Location = new System.Drawing.Point(60, 49);
+            this.tbSearch.Margin = new System.Windows.Forms.Padding(10);
             this.tbSearch.Name = "tbSearch";
             this.tbSearch.Size = new System.Drawing.Size(408, 33);
             this.tbSearch.TabIndex = 0;
@@ -233,6 +310,7 @@
             // 
             // tbIndexLocation
             // 
+            this.tbIndexLocation.BackColor = System.Drawing.Color.White;
             this.tbIndexLocation.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbIndexLocation.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbIndexLocation.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -247,6 +325,7 @@
             // 
             // tbCollection
             // 
+            this.tbCollection.BackColor = System.Drawing.Color.White;
             this.tbCollection.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbCollection.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbCollection.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -317,6 +396,12 @@
         private Custom.CustomPanel searchPanel;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox tbSearch;
+        private Custom.CustomLabel lblPage;
+        private Custom.CustomLabel lblSearchTime;
+        private System.Windows.Forms.Button btnNextPage;
+        private System.Windows.Forms.Button btnPrevPage;
+        private Custom.CustomPanel resultPanel;
+        private System.Windows.Forms.Button btnSave;
     }
 }
 
