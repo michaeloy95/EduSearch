@@ -629,5 +629,10 @@ namespace EduSearch.Views
             SaveForm saveForm = new SaveForm(CurrentTheme, CurrentResultDocs);
             saveForm.Show();
         }
+
+        private void searchPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
