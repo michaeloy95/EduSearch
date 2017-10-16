@@ -148,5 +148,10 @@ namespace EduSearch.Views
             this.lblExit.BackColor = CurrentTheme.TEXT_BACKHOVER_COLOR_R;
         }
         #endregion
+
+        private void JournalContentForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
