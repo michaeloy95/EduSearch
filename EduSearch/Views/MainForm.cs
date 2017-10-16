@@ -1,4 +1,5 @@
-﻿using EduSearch.Models;
+﻿using EduSearch.Custom;
+using EduSearch.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -144,6 +145,8 @@ namespace EduSearch.Views
 
             //Hide all controls in Search
             this.searchPanel.Visible = false;
+
+            this.pbLoading.Visible = false;
 
             this.folderBrowserDialog.SelectedPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
@@ -329,6 +332,9 @@ namespace EduSearch.Views
             DateTime startTime;
             this.SearchEngine = new SearchEngine();
 
+            this.lblIndexStatus.Visible = false;
+            this.pbLoading.Visible = true;
+
             this.AddLog("Allocating documents...");
             startTime = DateTime.Now;
 
@@ -352,9 +358,14 @@ namespace EduSearch.Views
             }
 
             this.AddLog($"All documents have been indexed in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
-
+            
             this.SearchEngine.CleanUpIndexer();
             this.searchPanel.Visible = true;
+
+            this.pbLoading.Visible = false;
+            this.lblIndexStatus.Text = "Indexing done.";
+            this.lblIndexStatus.ForeColor = Color.DarkGreen;
+            this.lblIndexStatus.Visible = true;
         }
 
         /// <summary>
@@ -543,6 +554,8 @@ namespace EduSearch.Views
             int rank_pos = 0;
             for (int i = ((this.CurrentResultPage - 1) * MaxResultPerPage); i < Math.Min(this.CurrentResultPage * MaxResultPerPage, this.CurrentResultDocs.Count); i++)
             {
+                Document document = CurrentResultDocs[i];
+
                 // display title
                 Label lblTitle = new Label();
                 lblTitle.AutoSize = false;
@@ -550,7 +563,7 @@ namespace EduSearch.Views
                 lblTitle.Location = new System.Drawing.Point(X_POS_TITLE, Y_POS_TITLE + (rank_pos * Y_NEXT_RESULT));
                 lblTitle.Size = new Size(490, 20);
                 lblTitle.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
-                lblTitle.Text = (i+1).ToString() + ". " + char.ToUpper(CurrentResultDocs[i].Title[0]).ToString() + CurrentResultDocs[i].Title.Substring(1);
+                lblTitle.Text = (i+1).ToString() + ". " + char.ToUpper(document.Title[0]).ToString() + document.Title.Substring(1);
                 lblTitle.Text = (lblTitle.Text.Length >= MAX_TITLE) ? lblTitle.Text.Substring(byte.MinValue, MAX_TITLE).Trim() + "..." : lblTitle.Text;
 
                 // display description
@@ -559,7 +572,7 @@ namespace EduSearch.Views
                 lblDesc.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 lblDesc.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
                 lblDesc.Location = new System.Drawing.Point(X_POS_OTHER, Y_POS_DESC + (rank_pos * Y_NEXT_RESULT));
-                lblDesc.Text = $"Document ID {CurrentResultDocs[i].Id}, by {CurrentResultDocs[i].Author}";
+                lblDesc.Text = $"Document ID {document.Id}, by {document.Author}";
                 lblDesc.Text = (lblDesc.Text.Length >= MAX_DESC) ? lblDesc.Text.Substring(byte.MinValue, MAX_DESC).Trim() + "..." : lblDesc.Text;
 
                 // display abstract
@@ -569,13 +582,20 @@ namespace EduSearch.Views
                 lblAbstract.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
                 lblAbstract.Location = new System.Drawing.Point(X_POS_OTHER, Y_POST_ABSTRACT + (rank_pos * Y_NEXT_RESULT));
                 lblAbstract.Size = new Size(490, 30);
-                lblAbstract.Text = char.ToUpper(CurrentResultDocs[i].Abstract[0]).ToString() + CurrentResultDocs[i].Abstract.Substring(1);
+                lblAbstract.Text = char.ToUpper(document.Abstract[0]).ToString() + document.Abstract.Substring(1);
                 lblAbstract.Text = (lblAbstract.Text.Length >= MAX_ABSTRACT) ? lblAbstract.Text.Substring(byte.MinValue, MAX_ABSTRACT).Trim() + "..." : lblAbstract.Text;
 
                 // add all of them to panel
                 this.resultPanel.Controls.Add(lblTitle);
                 this.resultPanel.Controls.Add(lblDesc);
                 this.resultPanel.Controls.Add(lblAbstract);
+
+                // add navigation on button click
+                lblTitle.Click += (o, e) =>
+                {
+                    JournalContentForm jcf = new JournalContentForm(CurrentTheme, document);
+                    jcf.Show();
+                };
 
                 rank_pos++;
             }
@@ -628,6 +648,27 @@ namespace EduSearch.Views
         {
             SaveForm saveForm = new SaveForm(CurrentTheme, CurrentResultDocs);
             saveForm.Show();
+        }
+
+        /// <summary>
+        /// Add loading animation
+        /// </summary>
+        private void AddLoadingTest()
+        {
+            CustomPanel panel = new CustomPanel();
+            panel.Size = new Size(this.Width, this.Height);
+            panel.BackColor = Color.FromArgb(150, Color.Black);
+            panel.BringToFront();
+
+            PictureBox pb = new PictureBox();
+            pb.BackColor = Color.Transparent;
+            pb.Image = EduSearch.Properties.Resources.loading;
+            pb.SizeMode = PictureBoxSizeMode.StretchImage;
+            pb.Size = new Size(200, 200);
+            pb.Location = new Point(this.Width / 2 - pb.Width / 2, this.Height / 2 - pb.Height / 2);
+
+            panel.Controls.Add(pb);
+            this.Controls.Add(panel);
         }
     }
 }

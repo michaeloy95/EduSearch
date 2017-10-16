@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.navPanel = new System.Windows.Forms.Panel();
+            this.lblTitle = new EduSearch.Custom.CustomLabel();
             this.lblMinim = new System.Windows.Forms.Label();
             this.lblExit = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -46,18 +48,18 @@
             this.lblLog = new System.Windows.Forms.Label();
             this.lbLog = new System.Windows.Forms.ListBox();
             this.indexPanel = new EduSearch.Custom.CustomPanel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblIndex = new EduSearch.Custom.CustomLabel();
             this.btnIndex = new System.Windows.Forms.Button();
             this.tbIndexLocation = new System.Windows.Forms.TextBox();
             this.tbCollection = new System.Windows.Forms.TextBox();
-            this.lblTitle = new EduSearch.Custom.CustomLabel();
+            this.lblIndexStatus = new System.Windows.Forms.Label();
+            this.pbLoading = new System.Windows.Forms.PictureBox();
             this.navPanel.SuspendLayout();
             this.bodyPanel.SuspendLayout();
             this.searchPanel.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.indexPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // navPanel
@@ -74,6 +76,17 @@
             this.navPanel.Size = new System.Drawing.Size(876, 31);
             this.navPanel.TabIndex = 0;
             this.navPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.NavPanel_MouseDown);
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.Font = new System.Drawing.Font("Forte", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.Black;
+            this.lblTitle.Location = new System.Drawing.Point(0, 4);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(113, 27);
+            this.lblTitle.TabIndex = 4;
+            this.lblTitle.Text = "EduSearch";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblMinim
             // 
@@ -266,7 +279,8 @@
             // 
             // indexPanel
             // 
-            this.indexPanel.Controls.Add(this.pictureBox1);
+            this.indexPanel.Controls.Add(this.pbLoading);
+            this.indexPanel.Controls.Add(this.lblIndexStatus);
             this.indexPanel.Controls.Add(this.lblIndex);
             this.indexPanel.Controls.Add(this.btnIndex);
             this.indexPanel.Controls.Add(this.tbIndexLocation);
@@ -276,14 +290,6 @@
             this.indexPanel.Name = "indexPanel";
             this.indexPanel.Size = new System.Drawing.Size(287, 228);
             this.indexPanel.TabIndex = 3;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(103, 157);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(80, 60);
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
             // 
             // lblIndex
             // 
@@ -338,16 +344,25 @@
             this.tbCollection.Text = "<collection>";
             this.tbCollection.Click += new System.EventHandler(this.tbCollection_Click);
             // 
-            // lblTitle
+            // lblIndexStatus
             // 
-            this.lblTitle.Font = new System.Drawing.Font("Forte", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.ForeColor = System.Drawing.Color.Black;
-            this.lblTitle.Location = new System.Drawing.Point(0, 4);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(113, 27);
-            this.lblTitle.TabIndex = 4;
-            this.lblTitle.Text = "EduSearch";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblIndexStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIndexStatus.ForeColor = System.Drawing.Color.Red;
+            this.lblIndexStatus.Location = new System.Drawing.Point(20, 158);
+            this.lblIndexStatus.Name = "lblIndexStatus";
+            this.lblIndexStatus.Size = new System.Drawing.Size(251, 23);
+            this.lblIndexStatus.TabIndex = 13;
+            this.lblIndexStatus.Text = "Indexing required.";
+            // 
+            // pbLoading
+            // 
+            this.pbLoading.Image = global::EduSearch.Properties.Resources.loading;
+            this.pbLoading.Location = new System.Drawing.Point(102, 151);
+            this.pbLoading.Name = "pbLoading";
+            this.pbLoading.Size = new System.Drawing.Size(76, 72);
+            this.pbLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbLoading.TabIndex = 14;
+            this.pbLoading.TabStop = false;
             // 
             // MainForm
             // 
@@ -359,9 +374,9 @@
             this.Controls.Add(this.navPanel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.navPanel.ResumeLayout(false);
             this.bodyPanel.ResumeLayout(false);
@@ -370,7 +385,7 @@
             this.leftPanel.ResumeLayout(false);
             this.indexPanel.ResumeLayout(false);
             this.indexPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -392,7 +407,6 @@
         private Custom.CustomPanel leftPanel;
         private System.Windows.Forms.Label lblLog;
         private System.Windows.Forms.ListBox lbLog;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private Custom.CustomPanel searchPanel;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox tbSearch;
@@ -402,6 +416,8 @@
         private System.Windows.Forms.Button btnPrevPage;
         private Custom.CustomPanel resultPanel;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Label lblIndexStatus;
+        private System.Windows.Forms.PictureBox pbLoading;
     }
 }
 
