@@ -68,9 +68,11 @@ namespace EduSearch.Views
         /// </summary>
         private void AllocateDocuments(Document CurrentDocument)
         {
+            this.lblTitle.Location = new Point(3, 6);
+            this.lblJournalTitle.Location = new Point(this.lblTitle.Location.X, this.lblTitle.Location.Y + 30);
             this.lblJournalTitle.Text = CurrentDocument.Title;
 
-            this.lblAuthorTitle.Location = new Point(3, 6);
+            this.lblAuthorTitle.Location = new Point(this.lblJournalTitle.Location.X, this.lblJournalTitle.Location.Y +51);
             this.lblAuthorContent.Location = new Point(this.lblAuthorTitle.Location.X, this.lblAuthorTitle.Location.Y + 30);
             this.lblAuthorContent.Text = CurrentDocument.Author;
 
