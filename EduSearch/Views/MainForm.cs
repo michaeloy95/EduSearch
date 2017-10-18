@@ -105,6 +105,10 @@ namespace EduSearch.Views
             this.tbCollection.ForeColor = this.CurrentTheme.TEXT_TEXTBOX_COLOR;
             this.tbIndexLocation.ForeColor = this.CurrentTheme.TEXT_TEXTBOX_COLOR;
 
+            //search panel
+            this.searchPanel.BackColor = this.CurrentTheme.BACKGROUND_SECONDARY_COLOR;
+            this.cbPreprocess.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+
             //result panel
             this.lblSearchTime.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
             this.lblPage.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
@@ -282,6 +286,16 @@ namespace EduSearch.Views
                 message = message.Substring(cutIndex, message.Length - cutIndex);
             }
             this.lbLog.Items.Add(message.Trim());
+        }
+        
+        /// <summary>
+        /// Clear Log
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void btnClearLog_Click(object sender, EventArgs e)
+        {
+            this.lbLog.Items.Clear();
         }
 
         /// <summary>
@@ -512,10 +526,7 @@ namespace EduSearch.Views
                     this.lblPage.Text = $"{CurrentResultPage}/{(this.CurrentResultDocs.Count / MaxResultPerPage) + Math.Sign(this.CurrentResultDocs.Count % MaxResultPerPage)}";
 
                     this.btnPrevPage.Enabled = false;
-                    if (CurrentResultDocs.Count <= MaxResultPerPage)
-                    {
-                        this.btnNextPage.Enabled = false;
-                    }
+                    this.btnNextPage.Enabled = (CurrentResultDocs.Count <= MaxResultPerPage) ? false : true;
                 }
                 catch (Exception ex)
                 {
@@ -529,6 +540,19 @@ namespace EduSearch.Views
                 this.btnSave.Visible = true;
 
                 this.SearchEngine.CleanUpSearcher();
+            }
+        }
+
+        /// <summary>
+        /// Search results
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void tbSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
             }
         }
 
