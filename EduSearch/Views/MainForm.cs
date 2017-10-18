@@ -671,7 +671,7 @@ namespace EduSearch.Views
         private void btnSave_Click(object sender, EventArgs e)
         {
             SaveForm saveForm = new SaveForm(CurrentTheme, CurrentResultDocs);
-            saveForm.Show();
+            saveForm.ShowDialog(this);
         }
 
         /// <summary>

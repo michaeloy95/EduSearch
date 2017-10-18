@@ -209,7 +209,7 @@ namespace EduSearch.Views
                 }
 
                 MessageBox.Show("Results saved");
-                ((MainForm)this.Parent).AddLog("Results saved.");
+                ((MainForm)this.Owner).AddLog("Results saved.");
                 this.Close();
             }
             catch (Exception ex)
