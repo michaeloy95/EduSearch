@@ -93,6 +93,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Document.cs" />
+    <Compile Include="Models\PorterStemmer.cs" />
     <Compile Include="Models\SearchEngine.cs" />
     <Compile Include="Themes\FlatBlue.cs" />
     <Compile Include="Themes\Theme.cs" />
@@ -151,6 +152,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Dictionaries\english.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="Resources\Images\BookBackground.jpg" />
     <Content Include="Resources\Images\loading.gif" />
     <Content Include="Resources\Images\logo.ico" />

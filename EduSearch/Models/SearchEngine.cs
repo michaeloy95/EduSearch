@@ -16,6 +16,16 @@ namespace EduSearch.Models
     public class SearchEngine
     {
         /// <summary>
+        /// Index directory of the collection
+        /// </summary>
+        private Dictionary<string, List<string>> thesaurus;
+
+        /// <summary>
+        /// Porter stemmer
+        /// </summary>
+        private PorterStemmerAlgorithm.PorterStemmer stemmer;
+
+        /// <summary>
         /// Contains all documents
         /// </summary>
         private Dictionary<string, Document> allDocuments;
@@ -105,6 +115,7 @@ namespace EduSearch.Models
             this.indexDirectory = null;
             this.writer = null;
             this.analyzer = null;
+            InitThesaurus();
         }
 
         /// <summary>
@@ -203,5 +214,42 @@ namespace EduSearch.Models
         {
             this.searcher.Dispose();
         }
+        /// <summary>
+        /// Fill the thesaurus from dictionary file
+        /// </summary>
+        public void InitThesaurus()
+        {
+            thesaurus = new Dictionary<string, List<string>>();
+            string[] dictionaryFile = System.IO.File.ReadAllLines(@"Resources/Dictionaries/english.txt");
+            if (stemmer == null)
+                stemmer = new PorterStemmerAlgorithm.PorterStemmer();
+            string stemResult = "";
+            foreach (string token in dictionaryFile)
+            {
+                stemResult = stemmer.stemTerm(token);
+                if (thesaurus.ContainsKey(stemResult))
+                    thesaurus[stemResult].Add(token);
+                else
+                {
+                    thesaurus[stemResult] = new List<string>();
+                    thesaurus[stemResult].Add(token);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get expanded query from thesaurus
+        /// </summary>
+        public List<string> GetExpandedQuery(string query)
+        {
+            if (stemmer == null)
+                stemmer = new PorterStemmerAlgorithm.PorterStemmer();
+            string stemmedQuery = stemmer.stemTerm(query);
+            if (thesaurus.ContainsKey(stemmedQuery))
+                return thesaurus[stemmedQuery];
+            else
+                return null;
+        }
+
     }
 }

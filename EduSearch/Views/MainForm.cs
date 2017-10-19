@@ -494,6 +494,13 @@ namespace EduSearch.Views
         /// <param name="e">Event arguments</param>
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            string query = this.tbSearch.Text;
+            if (cbPreprocess.Checked)
+            {
+                query = PreProcessQuery(query);
+                this.AddLog($"Processed query result: {query}");
+
+            }
             if (!string.IsNullOrEmpty(this.tbSearch.Text))
             {
                 this.SearchEngine.CreateSearcher();
@@ -504,7 +511,7 @@ namespace EduSearch.Views
                 try
                 {
                     DateTime startTime = DateTime.Now;
-                    this.CurrentResultDocs = this.SearchEngine.SearchIndex(tbSearch.Text);
+                    this.CurrentResultDocs = this.SearchEngine.SearchIndex(query);
                     double searchTime = (DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0;
 
                     this.AddLog($"Search is done. {this.CurrentResultDocs.Count} documents found in {searchTime} seconds.");
@@ -531,6 +538,27 @@ namespace EduSearch.Views
 
                 this.SearchEngine.CleanUpSearcher();
             }
+        }
+
+        /// <summary>
+        /// Query preprocessing
+        /// </summary>
+        /// <param name="query">query</param>
+        /// <results>Expanded query</results>
+        private string PreProcessQuery(string query)
+        {
+            string[] querySplit = query.Split(' ');
+            List<string> expandedQuery = new List<string>();
+            foreach (string token in querySplit)
+            {
+                var result = this.SearchEngine.GetExpandedQuery(token);
+                if (result != null)
+                    expandedQuery.AddRange(result);
+                else
+                    expandedQuery.Add(token);
+            }
+            query = String.Join(" ", expandedQuery);
+            return query;
         }
 
         /// <summary>
@@ -675,7 +703,7 @@ namespace EduSearch.Views
             SaveForm saveForm = new SaveForm(CurrentTheme, CurrentResultDocs);
             saveForm.ShowDialog(this);
         }
-
+        
         /// <summary>
         /// Add loading animation
         /// </summary>
