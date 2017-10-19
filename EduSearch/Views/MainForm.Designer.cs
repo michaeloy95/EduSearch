@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.navPanel = new System.Windows.Forms.Panel();
+            this.lblTitle = new EduSearch.Custom.CustomLabel();
             this.lblMinim = new System.Windows.Forms.Label();
             this.lblExit = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -55,7 +56,6 @@
             this.btnIndex = new System.Windows.Forms.Button();
             this.tbIndexLocation = new System.Windows.Forms.TextBox();
             this.tbCollection = new System.Windows.Forms.TextBox();
-            this.lblTitle = new EduSearch.Custom.CustomLabel();
             this.navPanel.SuspendLayout();
             this.bodyPanel.SuspendLayout();
             this.searchPanel.SuspendLayout();
@@ -78,6 +78,17 @@
             this.navPanel.Size = new System.Drawing.Size(876, 31);
             this.navPanel.TabIndex = 0;
             this.navPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.NavPanel_MouseDown);
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.Font = new System.Drawing.Font("Forte", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.Black;
+            this.lblTitle.Location = new System.Drawing.Point(0, 4);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(113, 27);
+            this.lblTitle.TabIndex = 4;
+            this.lblTitle.Text = "EduSearch";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblMinim
             // 
@@ -153,6 +164,8 @@
             // cbPreprocess
             // 
             this.cbPreprocess.AutoSize = true;
+            this.cbPreprocess.Checked = true;
+            this.cbPreprocess.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbPreprocess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cbPreprocess.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbPreprocess.Location = new System.Drawing.Point(60, 53);
@@ -379,17 +392,6 @@
             this.tbCollection.TabIndex = 0;
             this.tbCollection.Text = "<collection>";
             this.tbCollection.Click += new System.EventHandler(this.tbCollection_Click);
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.Font = new System.Drawing.Font("Forte", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.ForeColor = System.Drawing.Color.Black;
-            this.lblTitle.Location = new System.Drawing.Point(0, 4);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(113, 27);
-            this.lblTitle.TabIndex = 4;
-            this.lblTitle.Text = "EduSearch";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 

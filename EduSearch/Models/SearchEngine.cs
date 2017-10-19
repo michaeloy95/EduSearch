@@ -16,6 +16,11 @@ namespace EduSearch.Models
     public class SearchEngine
     {
         /// <summary>
+        /// Contains all documents
+        /// </summary>
+        private Dictionary<string, Document> allDocuments;
+
+        /// <summary>
         /// Index directory of the collection
         /// </summary>
         private Directory indexDirectory;
@@ -51,6 +56,11 @@ namespace EduSearch.Models
         private const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
 
         /// <summary>
+        /// Number of documents searched
+        /// </summary>
+        private const int SEARCH_DOCS_NUM = 1500;
+
+        /// <summary>
         /// Document ID field name
         /// </summary>
         private const string ID_FN = "Id";
@@ -75,6 +85,9 @@ namespace EduSearch.Models
         /// </summary>
         private const string ABSTRACT_FN = "Abstract";
 
+        /// <summary>
+        /// Index Field Name
+        /// </summary>
         public enum IndexFieldName
         {
             Id,
@@ -89,9 +102,9 @@ namespace EduSearch.Models
         /// </summary>
         public SearchEngine()
         {
-            indexDirectory = null;
-            writer = null;
-            analyzer = null;
+            this.indexDirectory = null;
+            this.writer = null;
+            this.analyzer = null;
         }
 
         /// <summary>
@@ -100,10 +113,11 @@ namespace EduSearch.Models
         /// <param name="indexPath">Directory path to create the index</param>
         public void CreateIndex(string indexPath)
         {
-            indexDirectory = Lucene.Net.Store.FSDirectory.Open(indexPath);
-            analyzer = new Lucene.Net.Analysis.Standard.StandardAnalyzer(VERSION);
+            this.indexDirectory = Lucene.Net.Store.FSDirectory.Open(indexPath);
+            this.analyzer = new Lucene.Net.Analysis.Standard.StandardAnalyzer(VERSION);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
-            writer = new Lucene.Net.Index.IndexWriter(indexDirectory, analyzer, true, mfl);
+            this.writer = new Lucene.Net.Index.IndexWriter(indexDirectory, analyzer, true, mfl);
+            this.allDocuments = new Dictionary<string, Document>();
         }
 
         /// <summary>
@@ -112,20 +126,23 @@ namespace EduSearch.Models
         /// <param name="myDoc">Document to index</param>
         public void IndexText(Document myDoc)
         {
+            // UPDATE: Only index ID and Abstract
             Lucene.Net.Documents.Field fieldID = new Field(ID_FN, myDoc.Id, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
-            Lucene.Net.Documents.Field fieldAuthor = new Field(AUTHOR_FN, myDoc.Author, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
-            Lucene.Net.Documents.Field fieldTitle = new Field(TITLE_FN, myDoc.Title, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
-            Lucene.Net.Documents.Field fieldBibliography = new Field(BIBLIOGRAPHY_FN, myDoc.Bibliography, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
-            Lucene.Net.Documents.Field fieldAbstract = new Field(ABSTRACT_FN, myDoc.Abstract, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            //Lucene.Net.Documents.Field fieldAuthor = new Field(AUTHOR_FN, myDoc.Author, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            //Lucene.Net.Documents.Field fieldTitle = new Field(TITLE_FN, myDoc.Title, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            //Lucene.Net.Documents.Field fieldBibliography = new Field(BIBLIOGRAPHY_FN, myDoc.Bibliography, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Lucene.Net.Documents.Field fieldAbstract = new Field(ABSTRACT_FN, $"{myDoc.Title} {myDoc.Abstract}", Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
 
             Lucene.Net.Documents.Document doc = new Lucene.Net.Documents.Document();
             doc.Add(fieldID);
-            doc.Add(fieldAuthor);
-            doc.Add(fieldTitle);
-            doc.Add(fieldBibliography);
+            //doc.Add(fieldAuthor);
+            //doc.Add(fieldTitle);
+            //doc.Add(fieldBibliography);
             doc.Add(fieldAbstract);
 
-            writer.AddDocument(doc);
+            this.writer.AddDocument(doc);
+
+            this.allDocuments.Add(myDoc.Id, myDoc);
         }
 
         /// <summary>
@@ -133,9 +150,9 @@ namespace EduSearch.Models
         /// </summary>
         public void CleanUpIndexer()
         {
-            writer.Optimize();
-            writer.Flush(true, true, true);
-            writer.Dispose();
+            this.writer.Optimize();
+            this.writer.Flush(true, true, true);
+            this.writer.Dispose();
         }
 
         /// <summary>
@@ -143,7 +160,7 @@ namespace EduSearch.Models
         /// </summary>
         public void CreateSearcher()
         {
-            searcher = new IndexSearcher(indexDirectory);
+            this.searcher = new IndexSearcher(indexDirectory);
         }
 
         /// <summary>
@@ -157,7 +174,7 @@ namespace EduSearch.Models
                                (indexFieldName == IndexFieldName.Author) ? AUTHOR_FN :
                                (indexFieldName == IndexFieldName.Bibliography) ? BIBLIOGRAPHY_FN :
                                ABSTRACT_FN;
-            parser = new QueryParser(VERSION, fieldName, analyzer);
+            this.parser = new QueryParser(VERSION, fieldName, analyzer);
         }
 
         /// <summary>
@@ -167,19 +184,14 @@ namespace EduSearch.Models
         /// <returns>Ranked list of relevant documents</returns>
         public List<Document> SearchIndex(string query)
         {
-            Query q = parser.Parse(query);
-            TopDocs td = searcher.Search(q, 100);
+            Query q = this.parser.Parse(query);
+            TopDocs td = this.searcher.Search(q, SEARCH_DOCS_NUM);
 
             List<Document> docs = new List<Document>();
             foreach (ScoreDoc sd in td.ScoreDocs)
             {
-                Document doc = new Document();
-                doc.Id = searcher.Doc(sd.Doc).Get(ID_FN).ToString();
-                doc.Author = searcher.Doc(sd.Doc).Get(AUTHOR_FN).ToString();
-                doc.Title = searcher.Doc(sd.Doc).Get(TITLE_FN).ToString();
-                doc.Bibliography = searcher.Doc(sd.Doc).Get(BIBLIOGRAPHY_FN).ToString();
-                doc.Abstract = searcher.Doc(sd.Doc).Get(ABSTRACT_FN).ToString();
-                docs.Add(doc);
+                string docId = this.searcher.Doc(sd.Doc).Get(ID_FN).ToString();
+                docs.Add(this.allDocuments[docId]);
             }
             return docs;
         }
@@ -189,7 +201,7 @@ namespace EduSearch.Models
         /// </summary>
         public void CleanUpSearcher()
         {
-            searcher.Dispose();
+            this.searcher.Dispose();
         }
     }
 }

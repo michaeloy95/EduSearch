@@ -15,11 +15,6 @@ namespace EduSearch.Views
     public partial class MainForm : Form
     {
         /// <summary>
-        /// All document colletion
-        /// </summary>
-        private Dictionary<string, Document> Dictionary;
-
-        /// <summary>
         /// Path to collection
         /// </summary>
         private string CollectionLocation;
@@ -353,11 +348,6 @@ namespace EduSearch.Views
             startTime = DateTime.Now;
 
             List<Document> foundDocuments = RecursivelyGenerateDocuments(this.CollectionLocation);
-            this.Dictionary = new Dictionary<string, Document>();
-            foreach (Document document in foundDocuments)
-            {
-                this.Dictionary.Add(document.Id, document);
-            }
 
             this.AddLog($"Documents successfully allocated in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
             
@@ -552,7 +542,7 @@ namespace EduSearch.Views
         {
             if (e.KeyCode == Keys.Enter)
             {
-                btnSearch_Click(sender, e);
+                this.btnSearch_Click(sender, e);
             }
         }
 
@@ -567,8 +557,8 @@ namespace EduSearch.Views
             const int X_POS_TITLE = 15;
             const int X_POS_OTHER = 20;
             const int Y_POS_TITLE = 5;
-            const int Y_POS_DESC = 30;
-            const int Y_POST_ABSTRACT = 45;
+            const int Y_POS_DESC = 33;
+            const int Y_POST_ABSTRACT = 48;
             const int Y_NEXT_RESULT = 90;
 
             const int MAX_TITLE = 65;
@@ -585,8 +575,9 @@ namespace EduSearch.Views
                 lblTitle.AutoSize = false;
                 lblTitle.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 lblTitle.Location = new System.Drawing.Point(X_POS_TITLE, Y_POS_TITLE + (rank_pos * Y_NEXT_RESULT));
-                lblTitle.Size = new Size(490, 20);
+                lblTitle.Size = new Size(490, 25);
                 lblTitle.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+                lblTitle.Cursor = Cursors.Hand;
                 lblTitle.Text = (i+1).ToString() + ". " + char.ToUpper(document.Title[0]).ToString() + document.Title.Substring(1);
                 lblTitle.Text = (lblTitle.Text.Length >= MAX_TITLE) ? lblTitle.Text.Substring(byte.MinValue, MAX_TITLE).Trim() + "..." : lblTitle.Text;
 
@@ -613,6 +604,17 @@ namespace EduSearch.Views
                 this.resultPanel.Controls.Add(lblTitle);
                 this.resultPanel.Controls.Add(lblDesc);
                 this.resultPanel.Controls.Add(lblAbstract);
+
+                // add underline animation on hover
+                lblTitle.MouseEnter += (o, e) =>
+                {
+                    lblTitle.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                };
+
+                lblTitle.MouseLeave += (o, e) =>
+                {
+                    lblTitle.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                };
 
                 // add navigation on button click
                 lblTitle.Click += (o, e) =>
