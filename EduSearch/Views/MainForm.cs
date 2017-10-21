@@ -42,7 +42,7 @@ namespace EduSearch.Views
         /// <summary>
         /// Current result documents
         /// </summary>
-        private List<Document> CurrentResultDocs;
+        private List<Journal> CurrentResultDocs;
 
         /// <summary>
         /// Current form theme
@@ -69,14 +69,14 @@ namespace EduSearch.Views
         public MainForm()
         {
             InitializeComponent();
-            ApplyTheme(new Themes.FlatBlue());
+            ApplyTheme(new Themes.Chrome());
             StartUpApp();
         }
 
         /// <summary>
         /// Apply the control's style specified in Themes.Theme
         /// </summary>
-        private void ApplyTheme(Themes.Theme theme)
+        public void ApplyTheme(Themes.Theme theme)
         {
             //select theme
             this.CurrentTheme = theme;
@@ -101,12 +101,23 @@ namespace EduSearch.Views
             this.tbIndexLocation.ForeColor = this.CurrentTheme.TEXT_TEXTBOX_COLOR;
 
             //search panel
-            this.searchPanel.BackColor = this.CurrentTheme.BACKGROUND_SECONDARY_COLOR;
+            this.searchPanel.BackColor = this.CurrentTheme.BACKGROUND_PRIMARY_COLOR;
             this.cbPreprocess.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
 
             //result panel
             this.lblSearchTime.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
             this.lblPage.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+            foreach (Control control in resultPanel.Controls)
+            {
+                if (typeof(Label) == control.GetType())
+                {
+                    control.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
+                }
+                else if (typeof(CustomLabel) == control.GetType())
+                {
+                    control.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
+                }
+            }
         }
 
         /// <summary>
@@ -148,6 +159,8 @@ namespace EduSearch.Views
             this.pbLoading.Visible = false;
 
             this.folderBrowserDialog.SelectedPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            this.CurrentResultDocs = new List<Journal>();
+            this.CurrentResultPage = 1;
         }
 
         #region Navigation Panel Settings
@@ -264,6 +277,46 @@ namespace EduSearch.Views
         {
             this.lblMinim.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR;
         }
+
+        /// <summary>
+        /// Hover settings button
+        /// </summary>
+        /// <param name="sender">object sender</param>
+        /// <param name="e">event arguments</param>
+        private void pbSettings_MouseHover(object sender, EventArgs e)
+        {
+            this.pbSettings.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR;
+        }
+
+        /// <summary>
+        /// Down settings button
+        /// </summary>
+        /// <param name="sender">object sender</param>
+        /// <param name="e">event arguments</param>
+        private void pbSettings_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.pbSettings.BackColor = this.CurrentTheme.TEXT_BACKCLICK_COLOR;
+        }
+
+        /// <summary>
+        /// Leave settings button
+        /// </summary>
+        /// <param name="sender">object sender</param>
+        /// <param name="e">event arguments</param>
+        private void pbSettings_MouseLeave(object sender, EventArgs e)
+        {
+            this.pbSettings.BackColor = Color.Transparent;
+        }
+
+        /// <summary>
+        /// Up settings button
+        /// </summary>
+        /// <param name="sender">object sender</param>
+        /// <param name="e">event arguments</param>
+        private void pbSettings_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.pbSettings.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR;
+        }
         #endregion
 
         /// <summary>
@@ -347,27 +400,29 @@ namespace EduSearch.Views
             this.AddLog("Allocating documents...");
             startTime = DateTime.Now;
 
-            List<Document> foundDocuments = RecursivelyGenerateDocuments(this.CollectionLocation);
+            List<Journal> foundDocuments = RecursivelyGenerateDocuments(this.CollectionLocation);
 
-            this.AddLog($"Documents successfully allocated in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
+            this.AddLog($"Documents successfully allocated ({(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds).");
             
             this.SearchEngine.CreateIndex(this.IndexLocation);
 
             this.AddLog("Start indexing...");
             startTime = DateTime.Now;
 
-            foreach (Document document in foundDocuments)
+            foreach (Journal document in foundDocuments)
             {            
                 this.SearchEngine.IndexText(document);
             }
 
-            this.AddLog($"All documents have been indexed in {(DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0} seconds.");
-            
+            double indexingTime = (DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0;
+            this.AddLog($"All documents have been indexed ({indexingTime} seconds).");
+
+
             this.SearchEngine.CleanUpIndexer();
             this.searchPanel.Visible = true;
 
             this.pbLoading.Visible = false;
-            this.lblIndexStatus.Text = "Indexing done.";
+            this.lblIndexStatus.Text = $"Indexing done ({indexingTime} seconds).";
             this.lblIndexStatus.ForeColor = Color.DarkGreen;
             this.lblIndexStatus.Visible = true;
         }
@@ -377,12 +432,12 @@ namespace EduSearch.Views
         /// </summary>
         /// <param name="path">Path to root directory</param>
         /// <returns>List of structured documents</returns>
-        private List<Document> RecursivelyGenerateDocuments(string path)
+        private List<Journal> RecursivelyGenerateDocuments(string path)
         {
             System.IO.DirectoryInfo root = new System.IO.DirectoryInfo(path);
             System.IO.FileInfo[] files = null;
             System.IO.DirectoryInfo[] subDirs = null;
-            List<Document> documents = new List<Document>();
+            List<Journal> documents = new List<Journal>();
 
             try
             {
@@ -422,9 +477,9 @@ namespace EduSearch.Views
         /// </summary>
         /// <param name="path">Path to text</param>
         /// <returns>Document object</returns>
-        private Document ExtractDocument(string path)
+        private Journal ExtractDocument(string path)
         {
-            Document document = new Document();
+            Journal document = new Journal();
             System.IO.StreamReader reader = new System.IO.StreamReader(path);
 
             try
@@ -494,19 +549,19 @@ namespace EduSearch.Views
         /// <param name="e">Event arguments</param>
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            string query = this.tbSearch.Text;
-            if (cbPreprocess.Checked)
-            {
-                query = PreProcessQuery(query);
-                this.AddLog($"Processed query result: {query}");
-
-            }
             if (!string.IsNullOrEmpty(this.tbSearch.Text))
             {
+                string query = this.tbSearch.Text;
+                if (this.cbPreprocess.Checked)
+                {
+                    query = this.SearchEngine.PreProcessQuery(query);
+                    this.AddLog($"Processed query result: {query}");
+                }
+
                 this.SearchEngine.CreateSearcher();
                 this.SearchEngine.CreateParser(SearchEngine.IndexFieldName.Abstract);
 
-                this.CurrentResultDocs = new List<Document>();
+                this.CurrentResultDocs = new List<Journal>();
 
                 try
                 {
@@ -514,7 +569,7 @@ namespace EduSearch.Views
                     this.CurrentResultDocs = this.SearchEngine.SearchIndex(query);
                     double searchTime = (DateTime.Now.Subtract(startTime)).Milliseconds / 1000.0;
 
-                    this.AddLog($"Search is done. {this.CurrentResultDocs.Count} documents found in {searchTime} seconds.");
+                    this.AddLog($"Search is done. {this.CurrentResultDocs.Count} documents found ({searchTime} seconds).");
                     this.lblSearchTime.Text = $"{this.CurrentResultDocs.Count} documents found ({searchTime} seconds)";
                     
                     this.CurrentResultPage = 1;
@@ -538,27 +593,6 @@ namespace EduSearch.Views
 
                 this.SearchEngine.CleanUpSearcher();
             }
-        }
-
-        /// <summary>
-        /// Query preprocessing
-        /// </summary>
-        /// <param name="query">query</param>
-        /// <results>Expanded query</results>
-        private string PreProcessQuery(string query)
-        {
-            string[] querySplit = query.Split(' ');
-            List<string> expandedQuery = new List<string>();
-            foreach (string token in querySplit)
-            {
-                var result = this.SearchEngine.GetExpandedQuery(token);
-                if (result != null)
-                    expandedQuery.AddRange(result);
-                else
-                    expandedQuery.Add(token);
-            }
-            query = String.Join(" ", expandedQuery);
-            return query;
         }
 
         /// <summary>
@@ -596,7 +630,7 @@ namespace EduSearch.Views
             int rank_pos = 0;
             for (int i = ((this.CurrentResultPage - 1) * MaxResultPerPage); i < Math.Min(this.CurrentResultPage * MaxResultPerPage, this.CurrentResultDocs.Count); i++)
             {
-                Document document = CurrentResultDocs[i];
+                Journal document = CurrentResultDocs[i];
 
                 // display title
                 Label lblTitle = new Label();
@@ -619,7 +653,7 @@ namespace EduSearch.Views
                 lblDesc.Text = (lblDesc.Text.Length >= MAX_DESC) ? lblDesc.Text.Substring(byte.MinValue, MAX_DESC).Trim() + "..." : lblDesc.Text;
 
                 // display abstract
-                Label lblAbstract = new Label();
+                CustomLabel lblAbstract = new CustomLabel();
                 lblAbstract.AutoSize = false;
                 lblAbstract.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 lblAbstract.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
@@ -647,7 +681,7 @@ namespace EduSearch.Views
                 // add navigation on button click
                 lblTitle.Click += (o, e) =>
                 {
-                    JournalContentForm jcf = new JournalContentForm(CurrentTheme, document);
+                    JournalForm jcf = new JournalForm(CurrentTheme, document);
                     jcf.Show();
                 };
 
@@ -723,6 +757,17 @@ namespace EduSearch.Views
 
             panel.Controls.Add(pb);
             this.Controls.Add(panel);
+        }
+
+        /// <summary>
+        /// Show SettingsForm
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void pbSettings_Click(object sender, EventArgs e)
+        {
+            SettingsForm sf = new SettingsForm(this.CurrentTheme);
+            sf.Show();
         }
     }
 }

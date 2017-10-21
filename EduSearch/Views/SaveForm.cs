@@ -25,7 +25,7 @@ namespace EduSearch.Views
         /// <summary>
         /// Current result documents
         /// </summary>
-        private List<Models.Document> CurrentResultDocs;
+        private List<Models.Journal> CurrentResultDocs;
 
         /// <summary>
         /// Current form theme
@@ -49,7 +49,7 @@ namespace EduSearch.Views
         /// <summary>
         /// SaveForm default constructor
         /// </summary>
-        public SaveForm(Themes.Theme CurrentTheme, List<Models.Document> CurrentResultDocs)
+        public SaveForm(Themes.Theme CurrentTheme, List<Models.Journal> CurrentResultDocs)
         {
             InitializeComponent();
             ApplyTheme(CurrentTheme);
@@ -196,7 +196,7 @@ namespace EduSearch.Views
                 using (writer)
                 {
                     int rank = 1;
-                    foreach (Models.Document document in CurrentResultDocs)
+                    foreach (Models.Journal document in CurrentResultDocs)
                     {
                         writer.WriteLine(tbQueryID.Text + "\t" +
                             "Q0" + "\t" +

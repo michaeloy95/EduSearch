@@ -1,5 +1,4 @@
-﻿using EduSearch.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,17 +10,12 @@ using System.Windows.Forms;
 
 namespace EduSearch.Views
 {
-    public partial class JournalContentForm : Form
+    public partial class SettingsForm : Form
     {
         /// <summary>
         /// Current form theme
         /// </summary>
         private Themes.Theme CurrentTheme;
-
-        /// <summary>
-        /// Current document
-        /// </summary>
-        private Document CurrentDocument;
 
         /// <summary>
         /// Gives shadow of the form
@@ -38,16 +32,21 @@ namespace EduSearch.Views
         }
 
         /// <summary>
-        /// JournalContentForm default constructor
+        /// SaveForm default constructor
         /// </summary>
-        public JournalContentForm(Themes.Theme CurrentTheme, Document CurrentDocument)
+        public SettingsForm(Themes.Theme CurrentTheme)
         {
             InitializeComponent();
-
-            this.CurrentDocument = CurrentDocument;
             ApplyTheme(CurrentTheme);
 
-            AllocateDocuments(this.CurrentDocument);
+            if (this.CurrentTheme.GetType() == typeof(Themes.Chrome))
+            {
+                this.cbTheme.SelectedIndex = 0;
+            }
+            else if (this.CurrentTheme.GetType() == typeof(Themes.FlatBlue))
+            {
+                this.cbTheme.SelectedIndex = 1;
+            }
         }
 
         /// <summary>
@@ -61,28 +60,11 @@ namespace EduSearch.Views
             //navigation panel
             this.navPanel.BackColor = this.CurrentTheme.BACKGROUND_NAVIGATION_COLOR;
             this.lblExit.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
-        }
+            this.lblTitle.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
 
-        /// <summary>
-        /// Initialise location of content's components
-        /// </summary>
-        private void AllocateDocuments(Document CurrentDocument)
-        {
-            this.lblTitle.Location = new Point(3, 6);
-            this.lblJournalTitle.Location = new Point(this.lblTitle.Location.X, this.lblTitle.Location.Y + 30);
-            this.lblJournalTitle.Text = CurrentDocument.Title;
-
-            this.lblAuthorTitle.Location = new Point(this.lblJournalTitle.Location.X, this.lblJournalTitle.Location.Y +51);
-            this.lblAuthorContent.Location = new Point(this.lblAuthorTitle.Location.X, this.lblAuthorTitle.Location.Y + 30);
-            this.lblAuthorContent.Text = CurrentDocument.Author;
-
-            this.lblBilbliographyTitle.Location = new Point(this.lblAuthorContent.Location.X, this.lblAuthorContent.Location.Y + 51);
-            this.lblBilbliographyContent.Location = new Point(this.lblBilbliographyTitle.Location.X, this.lblBilbliographyTitle.Location.Y + 30);
-            this.lblBilbliographyContent.Text = CurrentDocument.Bibliography;
-
-            this.lblAbstractTitle.Location = new Point(this.lblBilbliographyContent.Location.X, this.lblBilbliographyContent.Location.Y + 51);
-            this.lblAbstractContent.Location = new Point(this.lblAbstractTitle.Location.X, this.lblAbstractTitle.Location.Y + 30);
-            this.lblAbstractContent.Text = CurrentDocument.Abstract;
+            //setting panel
+            this.settingPanel.BackColor = this.CurrentTheme.BACKGROUND_SECONDARY_COLOR;
+            this.lblTheme.ForeColor = this.CurrentTheme.TEXT_PRIMARY_COLOR;
         }
 
         #region Navigation Panel Settings
@@ -101,7 +83,7 @@ namespace EduSearch.Views
         }
 
         /// <summary>
-        /// Click exit button
+        /// Exit application
         /// </summary>
         /// <param name="sender">object sender</param>
         /// <param name="e">event arguments</param>
@@ -109,7 +91,17 @@ namespace EduSearch.Views
         {
             this.Close();
         }
-       
+
+        /// <summary>
+        /// Hover exit button
+        /// </summary>
+        /// <param name="sender">object sender</param>
+        /// <param name="e">event arguments</param>
+        private void lblExit_MouseHover(object sender, EventArgs e)
+        {
+            this.lblExit.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR_R;
+        }
+
         /// <summary>
         /// Down exit button
         /// </summary>
@@ -117,24 +109,14 @@ namespace EduSearch.Views
         /// <param name="e">event arguments</param>
         private void lblExit_MouseDown(object sender, MouseEventArgs e)
         {
-            this.lblExit.BackColor = CurrentTheme.TEXT_BACKCLICK_COLOR;
-        }
-
-        /// <summary>
-        /// Hover exit button
-        /// </summary>
-        /// <param name="sender">Object sender</param>
-        /// <param name="e">Event arguments</param>
-        private void lblExit_MouseHover(object sender, EventArgs e)
-        {
-            this.lblExit.BackColor = CurrentTheme.TEXT_BACKHOVER_COLOR_R;
+            this.lblExit.BackColor = this.CurrentTheme.TEXT_BACKCLICK_COLOR_R;
         }
 
         /// <summary>
         /// Leave exit button
         /// </summary>
-        /// <param name="sender">Object sender</param>
-        /// <param name="e">Event arguments</param>
+        /// <param name="sender">object sender</param>
+        /// <param name="e">event arguments</param>
         private void lblExit_MouseLeave(object sender, EventArgs e)
         {
             this.lblExit.BackColor = Color.Transparent;
@@ -143,17 +125,52 @@ namespace EduSearch.Views
         /// <summary>
         /// Up exit button
         /// </summary>
-        /// <param name="sender">Object sender</param>
-        /// <param name="e">Event arguments</param>
+        /// <param name="sender">object sender</param>
+        /// <param name="e">event arguments</param>
         private void lblExit_MouseUp(object sender, MouseEventArgs e)
         {
-            this.lblExit.BackColor = CurrentTheme.TEXT_BACKHOVER_COLOR_R;
+            this.lblExit.BackColor = this.CurrentTheme.TEXT_BACKHOVER_COLOR_R;
         }
         #endregion
 
-        private void JournalContentForm_Load(object sender, EventArgs e)
+        /// <summary>
+        /// Dispose form
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void btnOk_Click(object sender, EventArgs e)
         {
+            this.Dispose();
+        }
 
+        /// <summary>
+        /// Update Theme
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void cbTheme_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbTheme.SelectedIndex == 0)
+            {
+                this.ApplyTheme(new Themes.Chrome());
+            }
+            else if (cbTheme.SelectedIndex == 1)
+            {
+                this.ApplyTheme(new Themes.FlatBlue());
+            }
+
+            MainForm mf = Application.OpenForms["MainForm"] as MainForm;
+            mf.ApplyTheme(this.CurrentTheme);
+        }
+
+        /// <summary>
+        /// Dispose form
+        /// </summary>
+        /// <param name="sender">Object sender</param>
+        /// <param name="e">Event arguments</param>
+        private void lblExit_Click_1(object sender, EventArgs e)
+        {
+            this.Dispose();
         }
     }
 }

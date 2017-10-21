@@ -28,7 +28,7 @@ namespace EduSearch.Models
         /// <summary>
         /// Contains all documents
         /// </summary>
-        private Dictionary<string, Document> allDocuments;
+        private Dictionary<string, Journal> allDocuments;
 
         /// <summary>
         /// Index directory of the collection
@@ -128,14 +128,14 @@ namespace EduSearch.Models
             this.analyzer = new Lucene.Net.Analysis.Standard.StandardAnalyzer(VERSION);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
             this.writer = new Lucene.Net.Index.IndexWriter(indexDirectory, analyzer, true, mfl);
-            this.allDocuments = new Dictionary<string, Document>();
+            this.allDocuments = new Dictionary<string, Journal>();
         }
 
         /// <summary>
         /// Indexes the given text
         /// </summary>
         /// <param name="myDoc">Document to index</param>
-        public void IndexText(Document myDoc)
+        public void IndexText(Journal myDoc)
         {
             // UPDATE: Only index ID and Abstract
             Lucene.Net.Documents.Field fieldID = new Field(ID_FN, myDoc.Id, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
@@ -193,12 +193,12 @@ namespace EduSearch.Models
         /// </summary>
         /// <param name="query">The search query</param>
         /// <returns>Ranked list of relevant documents</returns>
-        public List<Document> SearchIndex(string query)
+        public List<Journal> SearchIndex(string query)
         {
             Query q = this.parser.Parse(query);
             TopDocs td = this.searcher.Search(q, SEARCH_DOCS_NUM);
 
-            List<Document> docs = new List<Document>();
+            List<Journal> docs = new List<Journal>();
             foreach (ScoreDoc sd in td.ScoreDocs)
             {
                 string docId = this.searcher.Doc(sd.Doc).Get(ID_FN).ToString();
@@ -214,6 +214,7 @@ namespace EduSearch.Models
         {
             this.searcher.Dispose();
         }
+
         /// <summary>
         /// Fill the thesaurus from dictionary file
         /// </summary>
@@ -240,16 +241,50 @@ namespace EduSearch.Models
         /// <summary>
         /// Get expanded query from thesaurus
         /// </summary>
+        /// <param name="query">Query</param>
+        /// <returns>Expanded query</returns>
         public List<string> GetExpandedQuery(string query)
         {
-            if (stemmer == null)
-                stemmer = new PorterStemmerAlgorithm.PorterStemmer();
-            string stemmedQuery = stemmer.stemTerm(query);
-            if (thesaurus.ContainsKey(stemmedQuery))
-                return thesaurus[stemmedQuery];
-            else
-                return null;
-        }
+            if (this.stemmer == null)
+            {
+                this.stemmer = new PorterStemmerAlgorithm.PorterStemmer();
+            }
 
+            string stemmedQuery = stemmer.stemTerm(query);
+
+            if (thesaurus.ContainsKey(stemmedQuery))
+            {
+                return thesaurus[stemmedQuery];
+            }
+            else
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Query preprocessing
+        /// </summary>
+        /// <param name="query">query</param>
+        /// <returns>Expanded query</returns>
+        public string PreProcessQuery(string query)
+        {
+            string[] querySplit = query.Split(' ');
+            List<string> expandedQuery = new List<string>();
+            foreach (string token in querySplit)
+            {
+                List<string> result = this.GetExpandedQuery(token);
+                if (result != null)
+                {
+                    expandedQuery.AddRange(result);
+                }
+                else
+                {
+                    expandedQuery.Add(token);
+                }
+            }
+            query = String.Join(" ", expandedQuery);
+            return query;
+        }
     }
 }
