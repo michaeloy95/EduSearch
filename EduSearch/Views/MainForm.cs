@@ -391,6 +391,15 @@ namespace EduSearch.Views
         /// <param name="e">Event arguments</param>
         private void btnIndex_Click(object sender, EventArgs e)
         {
+            this.searchPanel.Visible = false;
+            this.btnPrevPage.Visible = false;
+            this.btnNextPage.Visible = false;
+            this.lblPage.Visible = false;
+            this.lblSearchTime.Visible = false;
+            this.btnSave.Visible = false;
+
+            this.resultPanel.Controls.Clear();
+
             DateTime startTime;
             this.SearchEngine = new SearchEngine();
 
@@ -425,6 +434,9 @@ namespace EduSearch.Views
             this.lblIndexStatus.Text = $"Indexing done ({indexingTime} seconds).";
             this.lblIndexStatus.ForeColor = Color.DarkGreen;
             this.lblIndexStatus.Visible = true;
+
+            this.tbSearch.Text = string.Empty;
+            this.tbSearch.Focus();
         }
 
         /// <summary>
