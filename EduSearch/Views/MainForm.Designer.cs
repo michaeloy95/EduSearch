@@ -391,6 +391,7 @@
             this.tbIndexLocation.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbIndexLocation.ForeColor = System.Drawing.Color.Black;
             this.tbIndexLocation.Location = new System.Drawing.Point(15, 72);
+            this.tbIndexLocation.Margin = new System.Windows.Forms.Padding(0);
             this.tbIndexLocation.Name = "tbIndexLocation";
             this.tbIndexLocation.ReadOnly = true;
             this.tbIndexLocation.Size = new System.Drawing.Size(256, 26);
@@ -406,6 +407,7 @@
             this.tbCollection.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbCollection.ForeColor = System.Drawing.Color.Black;
             this.tbCollection.Location = new System.Drawing.Point(15, 40);
+            this.tbCollection.Margin = new System.Windows.Forms.Padding(0);
             this.tbCollection.Name = "tbCollection";
             this.tbCollection.ReadOnly = true;
             this.tbCollection.Size = new System.Drawing.Size(256, 26);

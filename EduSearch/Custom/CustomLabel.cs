@@ -10,7 +10,7 @@ namespace EduSearch.Custom
         {
             Rectangle rc = this.ClientRectangle;
             StringFormat fmt = new StringFormat(StringFormat.GenericTypographic);
-            fmt.Alignment = StringAlignment.Center;
+            fmt.Alignment = StringAlignment.Near;
             using (var br = new SolidBrush(this.ForeColor))
             {
                 e.Graphics.DrawString(this.Text, this.Font, br, rc, fmt);
