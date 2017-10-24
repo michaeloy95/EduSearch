@@ -670,15 +670,9 @@ namespace EduSearch.Views
                 lblAbstract.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 lblAbstract.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
                 lblAbstract.Location = new System.Drawing.Point(X_POS_OTHER, Y_POST_ABSTRACT + (rank_pos * Y_NEXT_RESULT));
-<<<<<<< HEAD
-                lblAbstract.Size = new Size(490, 30);
-                lblAbstract.Text = char.ToUpper(document.Abstract[0]).ToString() + document.Abstract.Substring(1);
-                lblAbstract.Text = (lblAbstract.Text.Length >= MAX_ABSTRACT) ? lblAbstract.Text.Substring(byte.MinValue, MAX_ABSTRACT).Trim() + "..." : lblAbstract.Text;
-=======
                 lblAbstract.Size = new Size(490, 40);
                 lblAbstract.Text = char.ToUpper(document.Abstract[0]).ToString() + document.Abstract.Substring(1);
                 lblAbstract.Text = (lblAbstract.Text.Length >= MAX_ABSTRACT) ? lblAbstract.Text.Substring(byte.MinValue, MAX_ABSTRACT).Trim() + "..." : lblAbstract.Text.Trim();
->>>>>>> 1ec6d82c33a56f2418bada3d9969271909983521
 
                 // add all of them to panel
                 this.resultPanel.Controls.Add(lblTitle);

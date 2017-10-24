@@ -128,15 +128,7 @@ namespace EduSearch.Models
             this.analyzer = new Lucene.Net.Analysis.Standard.StandardAnalyzer(VERSION);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
             this.writer = new Lucene.Net.Index.IndexWriter(indexDirectory, analyzer, true, mfl);
-<<<<<<< HEAD
-<<<<<<< HEAD
-            this.writer.SetSimilarity(newSimilarity);
-=======
->>>>>>> parent of 91d0989... Latest
-            this.allDocuments = new Dictionary<string, Document>();
-=======
             this.allDocuments = new Dictionary<string, Journal>();
->>>>>>> 1ec6d82c33a56f2418bada3d9969271909983521
         }
 
         /// <summary>
@@ -261,19 +253,14 @@ namespace EduSearch.Models
             string stemmedQuery = stemmer.stemTerm(query);
 
             if (thesaurus.ContainsKey(stemmedQuery))
-<<<<<<< HEAD
             {
-<<<<<<< HEAD
                 for (int i = 0; i < thesaurus[stemmedQuery].Count; i++)
                 {
                     if (thesaurus[stemmedQuery][i] == query)
                         thesaurus[stemmedQuery][i] += "^5";
                 }
-=======
->>>>>>> 1ec6d82c33a56f2418bada3d9969271909983521
-=======
->>>>>>> parent of 91d0989... Latest
                 return thesaurus[stemmedQuery];
+            }
             else
             {
                 return null;
