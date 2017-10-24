@@ -92,17 +92,27 @@
     <Compile Include="Custom\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="Models\CustomSimilarity.cs" />
     <Compile Include="Models\Document.cs" />
+=======
+    <Compile Include="Models\Journal.cs" />
+>>>>>>> 1ec6d82c33a56f2418bada3d9969271909983521
     <Compile Include="Models\PorterStemmer.cs" />
     <Compile Include="Models\SearchEngine.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Themes\Chrome.cs" />
     <Compile Include="Themes\FlatBlue.cs" />
     <Compile Include="Themes\Theme.cs" />
-    <Compile Include="Views\JournalContentForm.cs">
+    <Compile Include="Views\JournalForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\JournalContentForm.Designer.cs">
-      <DependentUpon>JournalContentForm.cs</DependentUpon>
+    <Compile Include="Views\JournalForm.Designer.cs">
+      <DependentUpon>JournalForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\MainForm.cs">
       <SubType>Form</SubType>
@@ -119,24 +129,28 @@
     <Compile Include="Views\SaveForm.Designer.cs">
       <DependentUpon>SaveForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Views\JournalContentForm.resx">
-      <DependentUpon>JournalContentForm.cs</DependentUpon>
+    <Compile Include="Views\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Views\JournalForm.resx">
+      <DependentUpon>JournalForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Views\SaveForm.resx">
       <DependentUpon>SaveForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -153,6 +167,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Images\search.png" />
+    <Content Include="Resources\Images\settings.png" />
     <EmbeddedResource Include="Resources\Dictionaries\english.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

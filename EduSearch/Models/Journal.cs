@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EduSearch.Models
 {
-    public class Document
+    public class Journal
     {
         /// <summary>
         /// Document's Id
@@ -41,7 +41,7 @@ namespace EduSearch.Models
         /// <summary>
         /// Default Document constructor
         /// </summary>
-        public Document()
+        public Journal()
         {
             this.Id = string.Empty;
             this.Title = string.Empty;

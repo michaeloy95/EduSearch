@@ -1,6 +1,6 @@
 ﻿namespace EduSearch.Views
 {
-    partial class JournalContentForm
+    partial class JournalForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JournalContentForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JournalForm));
             this.navPanel = new System.Windows.Forms.Panel();
             this.lblExit = new System.Windows.Forms.Label();
             this.lblFormTitle = new System.Windows.Forms.Label();
