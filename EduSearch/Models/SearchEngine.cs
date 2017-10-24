@@ -115,6 +115,7 @@ namespace EduSearch.Models
             this.indexDirectory = null;
             this.writer = null;
             this.analyzer = null;
+            this.newSimilarity = null;
             InitThesaurus();
         }
 
@@ -126,8 +127,10 @@ namespace EduSearch.Models
         {
             this.indexDirectory = Lucene.Net.Store.FSDirectory.Open(indexPath);
             this.analyzer = new Lucene.Net.Analysis.Standard.StandardAnalyzer(VERSION);
+            this.newSimilarity = new CustomSimilarity();
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
             this.writer = new Lucene.Net.Index.IndexWriter(indexDirectory, analyzer, true, mfl);
+            this.writer.SetSimilarity(newSimilarity);
             this.allDocuments = new Dictionary<string, Document>();
         }
 
@@ -172,6 +175,7 @@ namespace EduSearch.Models
         public void CreateSearcher()
         {
             this.searcher = new IndexSearcher(indexDirectory);
+            this.searcher.Similarity = newSimilarity;
         }
 
         /// <summary>
@@ -246,7 +250,14 @@ namespace EduSearch.Models
                 stemmer = new PorterStemmerAlgorithm.PorterStemmer();
             string stemmedQuery = stemmer.stemTerm(query);
             if (thesaurus.ContainsKey(stemmedQuery))
+            {
+                for (int i = 0; i < thesaurus[stemmedQuery].Count; i++)
+                {
+                    if (thesaurus[stemmedQuery][i] == query)
+                        thesaurus[stemmedQuery][i] += "^5";
+                }
                 return thesaurus[stemmedQuery];
+            }
             else
                 return null;
         }

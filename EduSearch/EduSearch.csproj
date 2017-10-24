@@ -92,6 +92,7 @@
     <Compile Include="Custom\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Models\CustomSimilarity.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\PorterStemmer.cs" />
     <Compile Include="Models\SearchEngine.cs" />

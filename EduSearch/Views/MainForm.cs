@@ -625,7 +625,7 @@ namespace EduSearch.Views
                 lblAbstract.ForeColor = this.CurrentTheme.TEXT_SECONDARY_COLOR;
                 lblAbstract.Location = new System.Drawing.Point(X_POS_OTHER, Y_POST_ABSTRACT + (rank_pos * Y_NEXT_RESULT));
                 lblAbstract.Size = new Size(490, 30);
-                lblAbstract.Text = char.ToUpper(document.Abstract[0]).ToString() + document.Abstract.Substring(1);
+                lblAbstract.Text = (string.IsNullOrEmpty(document.Abstract)) ? lblAbstract.Text : char.ToUpper(document.Abstract[0]).ToString() + document.Abstract.Substring(1);
                 lblAbstract.Text = (lblAbstract.Text.Length >= MAX_ABSTRACT) ? lblAbstract.Text.Substring(byte.MinValue, MAX_ABSTRACT).Trim() + "..." : lblAbstract.Text;
 
                 // add all of them to panel
