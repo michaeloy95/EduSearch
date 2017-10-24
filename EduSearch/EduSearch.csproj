@@ -92,15 +92,9 @@
     <Compile Include="Custom\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <Compile Include="Models\CustomSimilarity.cs" />
-=======
->>>>>>> parent of 91d0989... Latest
     <Compile Include="Models\Document.cs" />
-=======
     <Compile Include="Models\Journal.cs" />
->>>>>>> 1ec6d82c33a56f2418bada3d9969271909983521
     <Compile Include="Models\PorterStemmer.cs" />
     <Compile Include="Models\SearchEngine.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
