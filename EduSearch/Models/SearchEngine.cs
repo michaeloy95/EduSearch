@@ -115,7 +115,6 @@ namespace EduSearch.Models
             this.indexDirectory = null;
             this.writer = null;
             this.analyzer = null;
-            this.newSimilarity = null;
             InitThesaurus();
         }
 
@@ -127,11 +126,13 @@ namespace EduSearch.Models
         {
             this.indexDirectory = Lucene.Net.Store.FSDirectory.Open(indexPath);
             this.analyzer = new Lucene.Net.Analysis.Standard.StandardAnalyzer(VERSION);
-            this.newSimilarity = new CustomSimilarity();
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
             this.writer = new Lucene.Net.Index.IndexWriter(indexDirectory, analyzer, true, mfl);
 <<<<<<< HEAD
+<<<<<<< HEAD
             this.writer.SetSimilarity(newSimilarity);
+=======
+>>>>>>> parent of 91d0989... Latest
             this.allDocuments = new Dictionary<string, Document>();
 =======
             this.allDocuments = new Dictionary<string, Journal>();
@@ -179,7 +180,6 @@ namespace EduSearch.Models
         public void CreateSearcher()
         {
             this.searcher = new IndexSearcher(indexDirectory);
-            this.searcher.Similarity = newSimilarity;
         }
 
         /// <summary>
@@ -261,6 +261,7 @@ namespace EduSearch.Models
             string stemmedQuery = stemmer.stemTerm(query);
 
             if (thesaurus.ContainsKey(stemmedQuery))
+<<<<<<< HEAD
             {
 <<<<<<< HEAD
                 for (int i = 0; i < thesaurus[stemmedQuery].Count; i++)
@@ -270,8 +271,9 @@ namespace EduSearch.Models
                 }
 =======
 >>>>>>> 1ec6d82c33a56f2418bada3d9969271909983521
+=======
+>>>>>>> parent of 91d0989... Latest
                 return thesaurus[stemmedQuery];
-            }
             else
             {
                 return null;

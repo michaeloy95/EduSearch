@@ -93,7 +93,10 @@
       <SubType>Component</SubType>
     </Compile>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <Compile Include="Models\CustomSimilarity.cs" />
+=======
+>>>>>>> parent of 91d0989... Latest
     <Compile Include="Models\Document.cs" />
 =======
     <Compile Include="Models\Journal.cs" />

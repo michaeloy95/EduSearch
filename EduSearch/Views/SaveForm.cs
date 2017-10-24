@@ -15,7 +15,7 @@ namespace EduSearch.Views
         /// <summary>
         /// System name constant
         /// </summary>
-        private const string SYSTEM_NAME = "N9574280_N9541951_N8477621_IRGroup";
+        private const string SYSTEM_NAME = "BaseLineN9574280";
 
         /// <summary>
         /// Path to save results
